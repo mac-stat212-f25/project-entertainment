@@ -246,11 +246,26 @@ cookieconsent.run({
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral" id="toc-project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral" class="nav-link active" data-scroll-target="#project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral">Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</a></li>
+  <li><a href="#short-description-of-the-project" id="toc-short-description-of-the-project" class="nav-link" data-scroll-target="#short-description-of-the-project">Short Description of the Project</a></li>
+  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions">Research Questions</a></li>
+  <li><a href="#reasons-and-inspiration" id="toc-reasons-and-inspiration" class="nav-link" data-scroll-target="#reasons-and-inspiration">Reasons and Inspiration</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a>
+  <ul class="collapse">
+  <li><a href="#dataset-name-tiktok-trending-videos-december-2020" id="toc-dataset-name-tiktok-trending-videos-december-2020" class="nav-link" data-scroll-target="#dataset-name-tiktok-trending-videos-december-2020">Dataset Name : Tiktok Trending Videos (December 2020)</a></li>
+  <li><a href="#key-variables" id="toc-key-variables" class="nav-link" data-scroll-target="#key-variables">Key variables:</a></li>
+  </ul></li>
+  <li><a href="#rough-implementation-responsibility-plan" id="toc-rough-implementation-responsibility-plan" class="nav-link" data-scroll-target="#rough-implementation-responsibility-plan">Rough Implementation &amp; Responsibility Plan</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appx/project_proposal.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appx/project_proposal.html"><span class="chapter-title">Project Proposal</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -259,7 +274,7 @@ cookieconsent.run({
 
 
 
-<div class="quarto-title-meta column-page-right">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -271,15 +286,51 @@ cookieconsent.run({
 </header>
 
 
-<p>#Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ? <strong>Team Name : </strong> Tiktok Police <strong>Team Members : </strong> Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa <strong>Category : </strong> Entertainment</p>
-<p>#Short Description of the Project We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.</p>
-<p>#Research Questions Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos? How does engagement differ between informational/news videos and entertainment videos on TikTok? What patterns in TikTok video trends can help explain how people consume news on social media platforms?</p>
-<p>#Reasons and Inspiration TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.</p>
-<p>#Dataset ###Dataset Name : Tiktok Trending Videos (December 2020) - <strong>Source :</strong> Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020) - <strong>Format :</strong> CSV + JSON - <strong>Size :</strong> Around 1000 trending videos</p>
-<p>###Key variables: - <strong>authorMeta.followers :</strong> Number of followers of creator - <strong>videoMeta.duration :</strong> Length of videos in seconds - <strong>text :</strong> video caption - <strong>hashtags :</strong> list of hashtags - <strong>musicMeta.musicName :</strong> Music/sound used in video - <strong>diggCount :</strong> Number of likes<br>
-- <strong>shareCount :</strong> Number of shares - <strong>playCount :</strong> Number of views - <strong>commentCount :</strong> Number of comments</p>
+<section id="project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral" class="level1">
+<h1>Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</h1>
+<p><strong>Team Name : </strong> Tiktok Police <strong>Team Members : </strong> Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa <strong>Category : </strong> Entertainment</p>
+</section>
+<section id="short-description-of-the-project" class="level1">
+<h1>Short Description of the Project</h1>
+<p>We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.</p>
+</section>
+<section id="research-questions" class="level1">
+<h1>Research Questions</h1>
+<p>Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos? How does engagement differ between informational/news videos and entertainment videos on TikTok? What patterns in TikTok video trends can help explain how people consume news on social media platforms?</p>
+</section>
+<section id="reasons-and-inspiration" class="level1">
+<h1>Reasons and Inspiration</h1>
+<p>TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.</p>
+</section>
+<section id="dataset" class="level1">
+<h1>Dataset</h1>
+<section id="dataset-name-tiktok-trending-videos-december-2020" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-name-tiktok-trending-videos-december-2020">Dataset Name : Tiktok Trending Videos (December 2020)</h3>
+<ul>
+<li><strong>Source :</strong> Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)</li>
+<li><strong>Format :</strong> CSV + JSON</li>
+<li><strong>Size :</strong> Around 1000 trending videos</li>
+</ul>
+</section>
+<section id="key-variables" class="level3">
+<h3 class="anchored" data-anchor-id="key-variables">Key variables:</h3>
+<ul>
+<li><strong>authorMeta.followers :</strong> Number of followers of creator</li>
+<li><strong>videoMeta.duration :</strong> Length of videos in seconds</li>
+<li><strong>text :</strong> video caption</li>
+<li><strong>hashtags :</strong> list of hashtags</li>
+<li><strong>musicMeta.musicName :</strong> Music/sound used in video</li>
+<li><strong>diggCount :</strong> Number of likes<br>
+</li>
+<li><strong>shareCount :</strong> Number of shares</li>
+<li><strong>playCount :</strong> Number of views</li>
+<li><strong>commentCount :</strong> Number of comments</li>
+</ul>
 <p>Notes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)</p>
-<p>#Rough Implementation &amp; Responsibility Plan</p>
+</section>
+</section>
+<section id="rough-implementation-responsibility-plan" class="level1">
+<h1>Rough Implementation &amp; Responsibility Plan</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -303,6 +354,7 @@ cookieconsent.run({
 
 <!-- -->
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -922,7 +974,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation column-page-right">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../eda/eda-member3.html" class="pagination-link" aria-label="Member 3 First Name &amp; Last Name Initial">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Member 3 First Name &amp; Last Name Initial</span></span>
@@ -938,33 +990,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-2"><a href="#cb2-2"></a><span class="an">title:</span><span class="co"> "Project Proposal"</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">---</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a>#Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu"># Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a>**Team Name : ** Tiktok Police</span>
 <span id="cb2-7"><a href="#cb2-7"></a>**Team Members : ** Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa</span>
 <span id="cb2-8"><a href="#cb2-8"></a>**Category : ** Entertainment</span>
 <span id="cb2-9"><a href="#cb2-9"></a></span>
 <span id="cb2-10"><a href="#cb2-10"></a></span>
-<span id="cb2-11"><a href="#cb2-11"></a>#Short Description of the Project</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="fu"># Short Description of the Project</span></span>
 <span id="cb2-12"><a href="#cb2-12"></a>We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.</span>
 <span id="cb2-13"><a href="#cb2-13"></a></span>
 <span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a>#Research Questions</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="fu"># Research Questions</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a>Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos?</span>
 <span id="cb2-17"><a href="#cb2-17"></a>How does engagement differ between informational/news videos and entertainment videos on TikTok?</span>
 <span id="cb2-18"><a href="#cb2-18"></a>What patterns in TikTok video trends can help explain how people consume news on social media platforms?</span>
 <span id="cb2-19"><a href="#cb2-19"></a></span>
 <span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a>#Reasons and Inspiration</span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="fu"># Reasons and Inspiration</span></span>
 <span id="cb2-22"><a href="#cb2-22"></a>TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.</span>
 <span id="cb2-23"><a href="#cb2-23"></a></span>
 <span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a>#Dataset</span>
-<span id="cb2-26"><a href="#cb2-26"></a>###Dataset Name : Tiktok Trending Videos (December 2020)</span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="fu"># Dataset</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="fu">### Dataset Name : Tiktok Trending Videos (December 2020)</span></span>
 <span id="cb2-27"><a href="#cb2-27"></a><span class="ss">- </span>**Source :** Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)</span>
 <span id="cb2-28"><a href="#cb2-28"></a><span class="ss">- </span>**Format :** CSV + JSON </span>
 <span id="cb2-29"><a href="#cb2-29"></a><span class="ss">- </span>**Size :** Around 1000 trending videos </span>
 <span id="cb2-30"><a href="#cb2-30"></a></span>
-<span id="cb2-31"><a href="#cb2-31"></a>###Key variables: </span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="fu">### Key variables: </span></span>
 <span id="cb2-32"><a href="#cb2-32"></a><span class="ss">- </span>**authorMeta.followers :** Number of followers of creator</span>
 <span id="cb2-33"><a href="#cb2-33"></a><span class="ss">- </span>**videoMeta.duration :** Length of videos in seconds</span>
 <span id="cb2-34"><a href="#cb2-34"></a><span class="ss">- </span>**text :** video caption</span>
@@ -979,7 +1031,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-43"><a href="#cb2-43"></a></span>
 <span id="cb2-44"><a href="#cb2-44"></a></span>
 <span id="cb2-45"><a href="#cb2-45"></a></span>
-<span id="cb2-46"><a href="#cb2-46"></a>#Rough Implementation &amp; Responsibility Plan</span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="fu"># Rough Implementation &amp; Responsibility Plan</span></span>
 <span id="cb2-47"><a href="#cb2-47"></a></span>
 <span id="cb2-50"><a href="#cb2-50"></a><span class="in">```{r}</span></span>
 <span id="cb2-51"><a href="#cb2-51"></a><span class="fu">library</span>(png)</span>
