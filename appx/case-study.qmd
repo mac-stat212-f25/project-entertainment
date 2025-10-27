@@ -2,4 +2,47 @@
 title: "Case Study"
 ---
 
-Your case study go here.
+# Case Study: Dating at 50 and Up — Older Americans’ Experiences with Online Dating
+
+**Source:** Pew Research Center (https://www.pewresearch.org/short-reads/2023/07/17/dating-at-50-and-up-older-americans-experiences-with-online-dating/)  
+**Team:** TikTok Police  
+**Date:** October 2025  
+
+---
+
+## 1. Overview
+This article from Pew Research Center looks at how Americans aged 50 and older use online dating and what their experiences are like. It talks about who in this age group is using dating apps, what problems they face, and how their opinions about online dating compare to younger people. The article combines simple text with a few clear charts, which makes it easy to follow.
+
+---
+
+## 2. Story Structure
+The story starts with a short introduction about how online dating has become more common for older adults. Then it moves into data about who is actually using dating apps and how those numbers change by gender and age.  
+Next, the article talks about challenges older users experience, like trouble finding matches or concerns about safety. Later sections discuss how older adults feel about dating online — some enjoy it, but many find it frustrating or not very successful.  
+The story ends with a summary that connects everything back to the main point: online dating can work for older people, but it’s often a mixed experience. The flow feels natural and easy to read because every paragraph connects directly to the chart shown below it.
+
+---
+
+## 3. Visual Storytelling
+The visuals are simple but effective. Most of them are bar charts that show comparisons across age or gender. The color palette is clean and consistent, which helps keep the focus on the message instead of the design.  
+Each chart supports a single point — for example, one shows that older women are less likely to use dating apps than men, and another shows that most people over 65 feel uncomfortable with online dating. Even though the visuals aren’t interactive, they clearly help the reader see trends in the data.
+
+---
+
+## 4. Writing Style
+The writing feels friendly and not too technical, which makes it easy for anyone to understand. The authors explain percentages in a casual way, like saying “about three in ten adults” instead of “30%.” Each section is short and straight to the point, which makes the story flow smoothly. It also avoids complicated analysis, focusing more on describing what the data shows and why it matters.
+
+---
+
+## 5. What We Learned
+From this report, we learned a few things that can help with our own project.  
+- It’s good to focus on a clear group comparison, like how Pew compared age groups.  
+- The layout works well — one idea per section with a chart to support it.  
+- The tone is simple and easy to read, which helps the audience stay engaged.  
+- The article shows how to connect data findings back to real-life experiences.  
+
+We also liked how this story focused on **age differences**, which is similar to our TikTok project. It reminded us that data about people should always be explained in a human way, not just shown as numbers.
+
+---
+
+## 6. Citation
+Pew Research Center. (2023, July 17). *Dating at 50 and Up: Older Americans’ Experiences with Online Dating.* Retrieved from [https://www.pewresearch.org/short-reads/2023/07/17/dating-at-50-and-up-older-americans-experiences-with-online-dating/](https://www.pewresearch.org/short-reads/2023/07/17/dating-at-50-and-up-older-americans-experiences-with-online-dating/)
