@@ -1,0 +1,100 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?",
+    "section": "",
+    "text": "Your report goes here.\n\n\nCode\n# a test code chunk",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Report</span>"
+    ]
+  },
+  {
+    "objectID": "eda/eda-member1.html",
+    "href": "eda/eda-member1.html",
+    "title": "Member 1 First Name & Last Name Initial",
+    "section": "",
+    "text": "Your exploratory data analysis of the team datasets go here.",
+    "crumbs": [
+      "EDA",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Member 1 First Name & Last Name Initial</span>"
+    ]
+  },
+  {
+    "objectID": "eda/eda-member2.html",
+    "href": "eda/eda-member2.html",
+    "title": "Member 2 First Name & Last Name Initial",
+    "section": "",
+    "text": "Your exploratory data analysis of the team datasets go here.",
+    "crumbs": [
+      "EDA",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Member 2 First Name & Last Name Initial</span>"
+    ]
+  },
+  {
+    "objectID": "eda/eda-member3.html",
+    "href": "eda/eda-member3.html",
+    "title": "Member 3 First Name & Last Name Initial",
+    "section": "",
+    "text": "Your exploratory data analysis of the team datasets go here.",
+    "crumbs": [
+      "EDA",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Member 3 First Name & Last Name Initial</span>"
+    ]
+  },
+  {
+    "objectID": "appx/project_proposal.html",
+    "href": "appx/project_proposal.html",
+    "title": "Appendix A — Project Proposal",
+    "section": "",
+    "text": "Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ? Team Name : Tiktok Police Team Members : Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa Category: Entertainment\nShort Description of the Project We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.\nResearch Questions Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos? How does engagement differ between informational/news videos and entertainment videos on TikTok? What patterns in TikTok video trends can help explain how people consume news on social media platforms?\nReasons/ Inspiration TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.\nDataset Dataset Name : Tiktok Trending Videos (December 2020) - Source : Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020) - Format : CSV + JSON - Size : Around 1000 trending videos\nKey variables: - authorMeta.followers : Number of followers of creator - videoMeta.duration : Length of videos in seconds - text : video caption - hashtags : list of hashtags - musicMeta.musicName : Music/sound used in video - diggCount : Number of likes\n- shareCount : Number of shares - playCount : Number of views - commentCount : Number of comments\nNotes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)\nRough Implementation & Responsibility Plan\n\n\nCode\nlibrary(png)\n\n# Read the image\nimg &lt;- readPNG(\"/Users/raouda/Desktop/Implementation.png\")\n\nplot(1:2, type='n', axes=FALSE, xlab=\"\", ylab=\"\", main=\"\", asp=1)\nrasterImage(img, 1, 1, 2,2)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Project Proposal</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html",
+    "href": "appx/case-study.html",
+    "title": "Appendix B — Case Study",
+    "section": "",
+    "text": "Your case study go here.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "wa/wa-member1.html",
+    "href": "wa/wa-member1.html",
+    "title": "Appendix C — Member 1 First Name & Last Name Initial",
+    "section": "",
+    "text": "Work area to try code",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Member 1 First Name & Last Name Initial</span>"
+    ]
+  },
+  {
+    "objectID": "wa/wa-member2.html",
+    "href": "wa/wa-member2.html",
+    "title": "Appendix D — Member 2 First Name & Last Name Initial",
+    "section": "",
+    "text": "Work area to try code",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>Member 2 First Name & Last Name Initial</span>"
+    ]
+  },
+  {
+    "objectID": "wa/wa-member3.html",
+    "href": "wa/wa-member3.html",
+    "title": "Appendix E — Member 3 First Name & Last Name Initial",
+    "section": "",
+    "text": "Work area to try code",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>Member 3 First Name & Last Name Initial</span>"
+    ]
+  }
+]
