@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?",
+    "title": "Project Title",
     "section": "",
     "text": "Your report goes here.\n\n\nCode\n# a test code chunk",
     "crumbs": [
@@ -43,14 +43,14 @@
     ]
   },
   {
-    "objectID": "appx/project_proposal.html",
-    "href": "appx/project_proposal.html",
-    "title": "Appendix A — Project Proposal",
+    "objectID": "appx/proposal.html",
+    "href": "appx/proposal.html",
+    "title": "Appendix A — Proposal",
     "section": "",
-    "text": "Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ? Team Name : Tiktok Police Team Members : Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa Category: Entertainment\nShort Description of the Project We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.\nResearch Questions Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos? How does engagement differ between informational/news videos and entertainment videos on TikTok? What patterns in TikTok video trends can help explain how people consume news on social media platforms?\nReasons/ Inspiration TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.\nDataset Dataset Name : Tiktok Trending Videos (December 2020) - Source : Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020) - Format : CSV + JSON - Size : Around 1000 trending videos\nKey variables: - authorMeta.followers : Number of followers of creator - videoMeta.duration : Length of videos in seconds - text : video caption - hashtags : list of hashtags - musicMeta.musicName : Music/sound used in video - diggCount : Number of likes\n- shareCount : Number of shares - playCount : Number of views - commentCount : Number of comments\nNotes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)\nRough Implementation & Responsibility Plan\n\n\nCode\nlibrary(png)\n\n# Read the image\nimg &lt;- readPNG(\"/Users/raouda/Desktop/Implementation.png\")\n\nplot(1:2, type='n', axes=FALSE, xlab=\"\", ylab=\"\", main=\"\", asp=1)\nrasterImage(img, 1, 1, 2,2)",
+    "text": "Your proposal go here.",
     "crumbs": [
       "Appendices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Project Proposal</span>"
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Proposal</span>"
     ]
   },
   {
@@ -58,7 +58,73 @@
     "href": "appx/case-study.html",
     "title": "Appendix B — Case Study",
     "section": "",
-    "text": "Your case study go here.",
+    "text": "Case Study: Dating at 50 and Up — Older Americans’ Experiences with Online Dating\nSource: Pew Research Center (https://www.pewresearch.org/short-reads/2023/07/17/dating-at-50-and-up-older-americans-experiences-with-online-dating/)\nTeam: TikTok Police\nDate: October 2025",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#overview",
+    "href": "appx/case-study.html#overview",
+    "title": "Appendix B — Case Study",
+    "section": "1. Overview",
+    "text": "1. Overview\nThis article from Pew Research Center looks at how Americans aged 50 and older use online dating and what their experiences are like. It talks about who in this age group is using dating apps, what problems they face, and how their opinions about online dating compare to younger people. The article combines simple text with a few clear charts, which makes it easy to follow.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#story-structure",
+    "href": "appx/case-study.html#story-structure",
+    "title": "Appendix B — Case Study",
+    "section": "2. Story Structure",
+    "text": "2. Story Structure\nThe story starts with a short introduction about how online dating has become more common for older adults. Then it moves into data about who is actually using dating apps and how those numbers change by gender and age.\nNext, the article talks about challenges older users experience, like trouble finding matches or concerns about safety. Later sections discuss how older adults feel about dating online — some enjoy it, but many find it frustrating or not very successful.\nThe story ends with a summary that connects everything back to the main point: online dating can work for older people, but it’s often a mixed experience. The flow feels natural and easy to read because every paragraph connects directly to the chart shown below it.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#visual-storytelling",
+    "href": "appx/case-study.html#visual-storytelling",
+    "title": "Appendix B — Case Study",
+    "section": "3. Visual Storytelling",
+    "text": "3. Visual Storytelling\nThe visuals are simple but effective. Most of them are bar charts that show comparisons across age or gender. The color palette is clean and consistent, which helps keep the focus on the message instead of the design.\nEach chart supports a single point — for example, one shows that older women are less likely to use dating apps than men, and another shows that most people over 65 feel uncomfortable with online dating. Even though the visuals aren’t interactive, they clearly help the reader see trends in the data.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#writing-style",
+    "href": "appx/case-study.html#writing-style",
+    "title": "Appendix B — Case Study",
+    "section": "4. Writing Style",
+    "text": "4. Writing Style\nThe writing feels friendly and not too technical, which makes it easy for anyone to understand. The authors explain percentages in a casual way, like saying “about three in ten adults” instead of “30%.” Each section is short and straight to the point, which makes the story flow smoothly. It also avoids complicated analysis, focusing more on describing what the data shows and why it matters.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#what-we-learned",
+    "href": "appx/case-study.html#what-we-learned",
+    "title": "Appendix B — Case Study",
+    "section": "5. What We Learned",
+    "text": "5. What We Learned\nFrom this report, we learned a few things that can help with our own project.\n- It’s good to focus on a clear group comparison, like how Pew compared age groups.\n- The layout works well — one idea per section with a chart to support it.\n- The tone is simple and easy to read, which helps the audience stay engaged.\n- The article shows how to connect data findings back to real-life experiences.\nWe also liked how this story focused on age differences, which is similar to our TikTok project. It reminded us that data about people should always be explained in a human way, not just shown as numbers.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
+    ]
+  },
+  {
+    "objectID": "appx/case-study.html#citation",
+    "href": "appx/case-study.html#citation",
+    "title": "Appendix B — Case Study",
+    "section": "6. Citation",
+    "text": "6. Citation\nPew Research Center. (2023, July 17). Dating at 50 and Up: Older Americans’ Experiences with Online Dating. Retrieved from https://www.pewresearch.org/short-reads/2023/07/17/dating-at-50-and-up-older-americans-experiences-with-online-dating/",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Case Study</span>"
