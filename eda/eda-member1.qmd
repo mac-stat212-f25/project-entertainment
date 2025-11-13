@@ -1,5 +1,16 @@
 ---
-title: "Member 1 First Name & Last Name Initial"
+title: "Shurui Z"
 ---
 
-Your exploratory data analysis of the team datasets go here.
+# TikTok Data EDA
+
+```{r}
+library(tidyverse)
+library(DataExplorer)
+library(SmartEDA)
+library(summarytools)
+```
+
+```{r}
+raw <- read_csv(./../data/raw/tiktok.csv)
+```
