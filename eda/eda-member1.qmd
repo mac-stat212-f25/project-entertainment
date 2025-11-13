@@ -4,13 +4,73 @@ title: "Shurui Z"
 
 # TikTok Data EDA
 
+## Import Dataset
+
 ```{r}
 library(tidyverse)
 library(DataExplorer)
 library(SmartEDA)
 library(summarytools)
+library(visdat)
+library(scales)
 ```
 
 ```{r}
-raw <- read_csv(./../data/raw/tiktok.csv)
+raw <- read_csv("./../data/raw/tiktok.csv")
+```
+
+```{r}
+dim(raw)
+colnames(raw)
+```
+
+## Basic Cleaning
+
+```{r}
+# parse common numeric columns that might be strings
+convert_to_numeric <- function(data,cols){
+  raw |> 
+   mutate(across(all_of(cols), ~ as.numeric(.))) 
+}
+df <- raw |> 
+  as_tibble() |> 
+convert_to_numeric(c("followers", "following", "likes","awg_engagement_rate", "comment_engagement_rate", "like_engagement_rate"))
+glimpse(df)
+  
+  
+```
+
+## Missing data Diagnostics
+
+```{r}
+#Percent missing per column
+miss_pct <- sapply(df, function(x) mean(is.na(x))) * 100
+miss_tbl <- tibble(column = names(miss_pct), pct_missing = miss_pct) |> 
+  arrange(desc(pct_missing))
+print(miss_tbl)
+
+```
+
+```{r}
+#visualize missingness
+visdat::vis_miss(df)
+```
+
+## Summary Statistics(numeric)
+
+```{r descriptives}
+num_vars <- df |> 
+  select_if(is.numeric)
+summary(num_vars)
+dfSummary(num_vars, plain.ascii = FALSE, style = "grid")
+```
+
+## Distributions & Outliers
+
+```{r distributions, fig.height=6}
+p1 <- ggplot(df, aes(x = followers)) +
+  geom_histogram(bins = 60) +
+  scale_x_continuous(trans = 'log10', labels = comma_format(accuracy = 1)) +
+  labs(title = "Followers distribution (log10)", x = "Followers (log10)", y = "Count")
+
 ```
