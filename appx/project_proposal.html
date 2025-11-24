@@ -195,12 +195,12 @@ cookieconsent.run({
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../eda/eda-member2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Member 2 First Name &amp; Last Name Initial</span></a>
+  <a href="../eda/eda-member2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Raouda Mamane BelLo boubacar</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../eda/eda-member3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Member 3 First Name &amp; Last Name Initial</span></a>
+  <a href="../eda/eda-member3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">eda-member3.html</span></a>
   </div>
 </li>
       </ul>
@@ -286,24 +286,24 @@ cookieconsent.run({
 </header>
 
 
-<section id="project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral" class="level1">
-<h1>Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</h1>
+<section id="project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral" class="level2">
+<h2 class="anchored" data-anchor-id="project-title-tiktok-video-popularity-analysis-what-makes-tiktok-videos-go-viral">Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</h2>
 <p><strong>Team Name : </strong> Tiktok Police <strong>Team Members : </strong> Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa <strong>Category : </strong> Entertainment</p>
 </section>
-<section id="short-description-of-the-project" class="level1">
-<h1>Short Description of the Project</h1>
+<section id="short-description-of-the-project" class="level2">
+<h2 class="anchored" data-anchor-id="short-description-of-the-project">Short Description of the Project</h2>
 <p>We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.</p>
 </section>
-<section id="research-questions" class="level1">
-<h1>Research Questions</h1>
+<section id="research-questions" class="level2">
+<h2 class="anchored" data-anchor-id="research-questions">Research Questions</h2>
 <p>Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos? How does engagement differ between informational/news videos and entertainment videos on TikTok? What patterns in TikTok video trends can help explain how people consume news on social media platforms?</p>
 </section>
-<section id="reasons-and-inspiration" class="level1">
-<h1>Reasons and Inspiration</h1>
+<section id="reasons-and-inspiration" class="level2">
+<h2 class="anchored" data-anchor-id="reasons-and-inspiration">Reasons and Inspiration</h2>
 <p>TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.</p>
 </section>
-<section id="dataset" class="level1">
-<h1>Dataset</h1>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <section id="dataset-name-tiktok-trending-videos-december-2020" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-name-tiktok-trending-videos-december-2020">Dataset Name : Tiktok Trending Videos (December 2020)</h3>
 <ul>
@@ -329,26 +329,19 @@ cookieconsent.run({
 <p>Notes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)</p>
 </section>
 </section>
-<section id="rough-implementation-responsibility-plan" class="level1">
-<h1>Rough Implementation &amp; Responsibility Plan</h1>
+<section id="rough-implementation-responsibility-plan" class="level2">
+<h2 class="anchored" data-anchor-id="rough-implementation-responsibility-plan">Rough Implementation &amp; Responsibility Plan</h2>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(png)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#library(png)</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># Read the image</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>img <span class="ot">&lt;-</span> <span class="fu">readPNG</span>(<span class="st">"/Users/raouda/Desktop/Implementation.png"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#img &lt;- readPNG("/Users/raouda/Desktop/Implementation.png")</span></span>
 <span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">type=</span><span class="st">'n'</span>, <span class="at">axes=</span><span class="cn">FALSE</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main=</span><span class="st">""</span>, <span class="at">asp=</span><span class="dv">1</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">rasterImage</span>(img, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#plot(1:2, type='n', axes=FALSE, xlab="", ylab="", main="", asp=1)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#rasterImage(img, 1, 1, 2,2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="project_proposal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
 </div>
 
 
@@ -976,8 +969,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="../eda/eda-member3.html" class="pagination-link" aria-label="Member 3 First Name &amp; Last Name Initial">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Member 3 First Name &amp; Last Name Initial</span></span>
+      <a href="../eda/eda-member3.html" class="pagination-link" aria-label="eda-member3.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">eda-member3.html</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -990,27 +983,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-2"><a href="#cb2-2"></a><span class="an">title:</span><span class="co"> "Project Proposal"</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">---</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="fu"># Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">## Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a>**Team Name : ** Tiktok Police</span>
 <span id="cb2-7"><a href="#cb2-7"></a>**Team Members : ** Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa</span>
 <span id="cb2-8"><a href="#cb2-8"></a>**Category : ** Entertainment</span>
 <span id="cb2-9"><a href="#cb2-9"></a></span>
 <span id="cb2-10"><a href="#cb2-10"></a></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="fu"># Short Description of the Project</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">## Short Description of the Project</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content. We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity. Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information. </span>
 <span id="cb2-13"><a href="#cb2-13"></a></span>
 <span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="fu"># Research Questions</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="fu">## Research Questions</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a>Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos?</span>
 <span id="cb2-17"><a href="#cb2-17"></a>How does engagement differ between informational/news videos and entertainment videos on TikTok?</span>
 <span id="cb2-18"><a href="#cb2-18"></a>What patterns in TikTok video trends can help explain how people consume news on social media platforms?</span>
 <span id="cb2-19"><a href="#cb2-19"></a></span>
 <span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="fu"># Reasons and Inspiration</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="fu">## Reasons and Inspiration</span></span>
 <span id="cb2-22"><a href="#cb2-22"></a>TikTok is one of the most influential social media for both entertainment and information sharing. While it is known for short viral content, an increasing number of users are also using TikTok for news and current events. We are interested in this topic because people of different ages use TikTok in different ways. While younger users often watch and share entertainment content, more people are also starting to get news from TikTok. By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.</span>
 <span id="cb2-23"><a href="#cb2-23"></a></span>
 <span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="fu"># Dataset</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="fu">## Dataset</span></span>
 <span id="cb2-26"><a href="#cb2-26"></a><span class="fu">### Dataset Name : Tiktok Trending Videos (December 2020)</span></span>
 <span id="cb2-27"><a href="#cb2-27"></a><span class="ss">- </span>**Source :** Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)</span>
 <span id="cb2-28"><a href="#cb2-28"></a><span class="ss">- </span>**Format :** CSV + JSON </span>
@@ -1031,16 +1024,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-43"><a href="#cb2-43"></a></span>
 <span id="cb2-44"><a href="#cb2-44"></a></span>
 <span id="cb2-45"><a href="#cb2-45"></a></span>
-<span id="cb2-46"><a href="#cb2-46"></a><span class="fu"># Rough Implementation &amp; Responsibility Plan</span></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="fu">## Rough Implementation &amp; Responsibility Plan</span></span>
 <span id="cb2-47"><a href="#cb2-47"></a></span>
 <span id="cb2-50"><a href="#cb2-50"></a><span class="in">```{r}</span></span>
-<span id="cb2-51"><a href="#cb2-51"></a><span class="fu">library</span>(png)</span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="co">#library(png)</span></span>
 <span id="cb2-52"><a href="#cb2-52"></a></span>
 <span id="cb2-53"><a href="#cb2-53"></a><span class="co"># Read the image</span></span>
-<span id="cb2-54"><a href="#cb2-54"></a>img <span class="ot">&lt;-</span> <span class="fu">readPNG</span>(<span class="st">"/Users/raouda/Desktop/Implementation.png"</span>)</span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="co">#img &lt;- readPNG("/Users/raouda/Desktop/Implementation.png")</span></span>
 <span id="cb2-55"><a href="#cb2-55"></a></span>
-<span id="cb2-56"><a href="#cb2-56"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">type=</span><span class="st">'n'</span>, <span class="at">axes=</span><span class="cn">FALSE</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main=</span><span class="st">""</span>, <span class="at">asp=</span><span class="dv">1</span>)</span>
-<span id="cb2-57"><a href="#cb2-57"></a><span class="fu">rasterImage</span>(img, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#plot(1:2, type='n', axes=FALSE, xlab="", ylab="", main="", asp=1)</span></span>
+<span id="cb2-57"><a href="#cb2-57"></a><span class="co">#rasterImage(img, 1, 1, 2,2)</span></span>
 <span id="cb2-58"><a href="#cb2-58"></a></span>
 <span id="cb2-59"><a href="#cb2-59"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
