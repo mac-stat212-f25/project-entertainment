@@ -1,0 +1,61 @@
+---
+title: "Figure TikTok dataset"
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(ggridges)
+library(ggtext)
+library(scales)
+library(fmsb)
+library(tidytext)
+```
+
+
+```{r}
+tiktok <- read_csv("./../data/raw/tiktok.csv") %>%
+  clean_names() %>%
+  select(
+    followers, likes, videos_count,
+    awg_engagement_rate, like_engagement_rate, comment_engagement_rate,
+    predicted_lang, region,
+    biography, signature, top_videos
+  ) %>%
+  mutate(across(where(is.character), na_if, "")) %>%
+  drop_na() %>%
+  distinct()
+```
+```{r}
+tiktok <- tiktok %>%
+  mutate(is_viral = ifelse(awg_engagement_rate > median(awg_engagement_rate), 
+                           "Viral", "Non-Viral")) %>%
+  mutate(is_viral = factor(is_viral, levels = c("Non-Viral", "Viral")))
+```
+
+```{r}
+custom_stop <- c("tiktok", "video", "follow")
+
+hook_words <- tiktok |>
+  select(is_viral, signature) |>
+  unnest_tokens(word, signature) |>
+  anti_join(stop_words, by="word") |>
+  filter(!word %in% custom_stop) |>
+  group_by(is_viral, word) |>
+  summarise(n = n(), .groups="drop") |>
+  group_by(is_viral) |>
+  slice_max(n, n = 15)  # top 15
+
+ggplot(hook_words, aes(n, fct_reorder(word, n), fill = is_viral)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~is_viral, scales = "free_y") +
+  labs(
+    title = "Top Words in Viral vs Non-Viral TikTok Captions",
+    x = "Frequency",
+    y = ""
+  ) +
+  theme_minimal(base_size = 10)
+```
+
+
+
