@@ -34,6 +34,8 @@ tiktok <- tiktok %>%
 ```
 
 ```{r}
+library(ggwordcloud)
+
 custom_stop <- c("tiktok", "video", "follow")
 
 hook_words <- tiktok |>
@@ -44,7 +46,41 @@ hook_words <- tiktok |>
   group_by(is_viral, word) |>
   summarise(n = n(), .groups="drop") |>
   group_by(is_viral) |>
-  slice_max(n, n = 15)  # top 15
+  slice_max(n, n = 15)
+
+#ggplot(hook_words, aes(label = word, size = n)) +
+  #geom_text_wordcloud() +
+  #scale_size_area(max_size = 20) +
+  #theme_minimal() +
+  #labs(title = "Word Cloud: Viral Videos (Caption Language)")
+
+ ggplot(hook_words, aes(label = word, size = n, color = n, alpha = n)) +
+  geom_text_wordcloud(
+    rm_outliers = TRUE,
+    eccentricity = 1.5,
+    grid_size = 10,
+    shape = "circle"
+  ) +
+  scale_size_area(max_size = 20, name = "Word Frequency") +
+  scale_alpha(range = c(0.3, 1),name = "Frequency (Transparency)") +         
+  scale_color_viridis_c(option = "C", name = "Frequency (Color)") +
+  guides(
+    size = guide_legend(),
+    color = guide_colorbar(),
+    alpha = guide_legend()
+  ) +
+  labs(
+    title = "Most Common Words in Viral TikTok Captions",
+    subtitle = "Size, color, and transparency all represent word frequency",
+    caption = "Data: TikTok dataset",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    legend.position = "right",
+    panel.grid = element_blank())
 
 ggplot(hook_words, aes(n, fct_reorder(word, n), fill = is_viral)) +
   geom_col(show.legend = FALSE) +
@@ -56,6 +92,7 @@ ggplot(hook_words, aes(n, fct_reorder(word, n), fill = is_viral)) +
   ) +
   theme_minimal(base_size = 10)
 ```
+
 
 
 
