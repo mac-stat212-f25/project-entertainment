@@ -1,5 +1,218 @@
 ---
-title: "Member 3 First Name & Last Name Initial"
+title: "Isa C"
 ---
+```{r}
 
-Your exploratory data analysis of the team datasets go here.
+library(tidyverse)
+library(janitor)
+library(scales)
+library(stringr)
+
+df <- read_csv("../data/raw/tiktok.csv") |>
+  clean_names()
+
+```
+
+```{r}
+num_cols <- c(
+  "followers", "following", "likes",
+  "videos_count",
+  "awg_engagement_rate",
+  "like_engagement_rate",
+  "comment_engagement_rate"
+)
+
+df <- df |>
+  mutate(across(all_of(num_cols), ~ suppressWarnings(as.numeric(.))))
+```
+
+```{r}
+df <- df |>
+  mutate(
+    bio_length = nchar(biography),
+
+    likes_per_video = if_else(videos_count > 0, likes / videos_count, NA_real_),
+
+    log_followers = log10(followers + 1),
+    log_likes_per_video = log10(likes_per_video + 1),
+    log_engagement = log10(awg_engagement_rate + 1e-6),
+
+    is_verified = as.factor(is_verified),
+    region = as.factor(region),
+    predicted_lang = as.factor(predicted_lang)
+  )
+```
+
+```{r}
+ggplot(df, aes(x = followers, y = awg_engagement_rate)) +
+  geom_point(alpha = 0.3) +
+  scale_x_log10(labels = comma) +
+  labs(
+    title = "Followers vs Average Engagement Rate",
+    x = "Followers (log10 scale)",
+    y = "Average Engagement Rate"
+  )
+
+```
+
+```{r}
+df_fgroup <- df |>
+  mutate(
+    follower_group = cut(
+      followers,
+      breaks = c(0, 1000, 10000, 100000, 1000000, Inf),
+      labels = c("0–1k", "1k–10k", "10k–100k", "100k–1M", "1M+"),
+      include.lowest = TRUE
+    )
+  ) |>
+  group_by(follower_group) |>
+  summarise(
+    mean_eng = mean(awg_engagement_rate, na.rm = TRUE),
+    median_eng = median(awg_engagement_rate, na.rm = TRUE),
+    n = n()
+  )
+
+df_fgroup
+
+ggplot(df_fgroup, aes(x = follower_group, y = mean_eng)) +
+  geom_col() +
+  labs(
+    title = "Average Engagement Rate by Follower Group",
+    x = "Follower Group",
+    y = "Mean Engagement Rate"
+  )
+```
+
+```{r}
+ggplot(df, aes(x = bio_length, y = awg_engagement_rate)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Bio Length vs Engagement Rate",
+    x = "Biography Length (characters)",
+    y = "Average Engagement Rate"
+  )
+```
+
+```{r}
+top_langs <- df |>
+  count(language_readable, sort = TRUE) |>
+  slice_head(n = 10)
+
+df_lang <- df |>
+  filter(language_readable %in% top_langs$language_readable)
+
+# -------------------------------
+# Remove extreme outliers (engagement > 5)
+# -------------------------------
+df_lang_clean <- df_lang |>
+  filter(awg_engagement_rate < 5)
+
+# -------------------------------
+# Plot: Engagement by language
+# -------------------------------
+ggplot(df_lang_clean, aes(x = language_readable, y = awg_engagement_rate)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    title = "Engagement Rate by Language (Top 10, Cleaned)",
+    x = "Language",
+    y = "Average Engagement Rate"
+  )
+```
+
+```{r}
+news_keywords <- regex(
+  "news|update|report|reporter|journalist|media|politic|gov|government|election|war|conflict|climate|crisis|ngo|organization|rights|world|country",
+  ignore_case = TRUE
+)
+
+# ---- Step 2: classify creators ----
+df_rq2 <- df |>
+  mutate(
+    creator_type = if_else(
+      str_detect(biography, news_keywords),
+      "news",
+      "entertainment"
+    )
+  )
+
+table(df_rq2$creator_type)
+```
+
+```{r}
+df_rq2 <- df_rq2 |> 
+  mutate(
+    creator_type = factor(creator_type, levels = c("news", "entertainment"))
+  )
+
+# --------- 1. Number of accounts -------------
+df_rq2 |>
+  count(creator_type) |>
+  ggplot(aes(x = creator_type, y = n, fill = creator_type)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Number of Creators: News vs Entertainment",
+    x = "Creator Type",
+    y = "Count"
+  )
+```
+
+```{r}
+df_eng_clean <- df_rq2 |>
+  filter(!is.na(awg_engagement_rate),
+         awg_engagement_rate < 5)   # 去掉极端值
+
+ggplot(df_eng_clean, aes(x = creator_type, y = awg_engagement_rate, fill = creator_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Engagement Rate: News vs Entertainment Creators",
+    x = "Creator Type",
+    y = "Average Engagement Rate"
+  )
+```
+
+```{r}
+df_followers_clean <- df_rq2 |>
+  filter(followers > 0)
+
+ggplot(df_followers_clean, aes(x = creator_type, y = log10(followers), fill = creator_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Followers (log10): News vs Entertainment Creators",
+    x = "Creator Type",
+    y = "log10(Followers)"
+  )
+```
+
+```{r}
+df_interaction <- df_rq2 |>
+  filter(
+    !is.na(like_engagement_rate),
+    like_engagement_rate < 10
+  )
+
+ggplot(df_interaction, aes(x = creator_type, y = like_engagement_rate, fill = creator_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Like Engagement Rate: News vs Entertainment",
+    x = "Creator Type",
+    y = "Like Engagement Rate"
+  )
+```
+
+```{r}
+df_interaction2 <- df_rq2 |>
+  filter(
+    !is.na(comment_engagement_rate),
+    comment_engagement_rate < 5
+  )
+
+ggplot(df_interaction2, aes(x = creator_type, y = comment_engagement_rate, fill = creator_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Comment Engagement Rate: News vs Entertainment",
+    x = "Creator Type",
+    y = "Comment Engagement Rate"
+  )
+```
+
