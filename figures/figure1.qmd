@@ -35,6 +35,7 @@ tiktok <- tiktok %>%
 
 ```{r}
 library(ggwordcloud)
+library(highcharter)
 
 custom_stop <- c("tiktok", "video", "follow")
 
@@ -91,6 +92,19 @@ ggplot(hook_words, aes(n, fct_reorder(word, n), fill = is_viral)) +
     y = ""
   ) +
   theme_minimal(base_size = 10)
+
+hcwc <- hook_words %>%
+  hchart(
+    "wordcloud",
+    hcaes(name = word, weight = n),
+    name = "Viral Word Frequency"
+  ) %>%
+  hc_title(text = "Most Common Words in Viral TikTok Captions") %>%
+  hc_tooltip(pointFormat = "{point.name}: {point.weight}") %>%
+  hc_colorAxis(stops = color_stops(10))
+```
+```{r}
+music <- read_csv("./../data/raw/TikTok_songs_2022.csv")
 ```
 
 
