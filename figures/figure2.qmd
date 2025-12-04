@@ -42,6 +42,35 @@ genre <- genre %>%
     views = convert_number(Views),
     engagement = convert_number(Engagement)
   )
+
+df_genre <- genre %>%
+  group_by(Genre) %>%
+  summarise(
+    avg_views = mean(views, na.rm = TRUE),
+    avg_engagement = mean(engagement, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(avg_views))
+
+# Plotly interactive bar chart
+p <- plot_ly(df_genre,
+             x = ~Genre,
+             y = ~avg_views,
+             type = "bar",
+             hoverinfo = "text",
+             text = ~paste(
+               "Genre:", Genre,
+               "<br>Avg Views:", scales::comma(avg_views),
+               "<br>Avg Engagement:", scales::comma(avg_engagement),
+               "<br>Creators:", n
+             )) %>%
+  layout(
+    title = "Average TikTok Views by Genre",
+    xaxis = list(title = "Genre"),
+    yaxis = list(title = "Average Views"),
+    hoverlabel = list(bgcolor = "white")
+  )
+p
 ```
 
 ```{r}
