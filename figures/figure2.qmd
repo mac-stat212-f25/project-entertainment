@@ -1,0 +1,49 @@
+---
+title: "figure2"
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+```
+
+```{r}
+tiktoker <- read_csv("./../data/processed/top-250-tiktokers.csv")
+```
+
+# What Genres Perform The Best?
+
+```{r}
+# Separate genres
+genre <- tiktoker |> 
+  separate_rows(Genre, sep = ",\\s*") |>
+  mutate(Genre = str_trim(Genre))
+
+# Function for converting K/M numbers
+convert_number <- function(x) {
+  x <- tolower(x)                                   # normalize lowercase
+  x <- str_replace_all(x, ",", "")                 # remove commas
+  x <- str_replace_all(x, "views", "")             # remove words
+  x <- str_replace_all(x, "%", "")                 # remove %
+  x <- str_trim(x)                                 # trim spaces
+  
+  case_when(
+    str_detect(x, "k$") ~ as.numeric(str_remove(x, "k")) * 1e3,
+    str_detect(x, "m$") ~ as.numeric(str_remove(x, "m")) * 1e6,
+    x == "" ~ NA_real_,
+    TRUE ~ suppressWarnings(as.numeric(x))
+  )
+}
+# Apply to both Views and Engagement
+genre <- genre %>%
+  mutate(
+    views = convert_number(Views),
+    engagement = convert_number(Engagement)
+  )
+```
+
+```{r}
+topuser <- read_csv("./../data/processed/top_users_vids.csv")
+```
