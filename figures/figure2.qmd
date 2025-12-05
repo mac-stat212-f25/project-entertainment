@@ -73,6 +73,90 @@ p <- plot_ly(df_genre,
 p
 ```
 
+# Does Famous before TikTok matter for becoming viral on TikTok?
+
+Engagement: Views + Likes + Shares / 15 most recent videos, collected on 10-24-2020
+
+```{r}
+library(tidyverse)
+
+convert_number <- function(x) {
+  x <- tolower(x)                                   # normalize lowercase
+  x <- str_replace_all(x, ",", "")                 # remove commas
+  x <- str_replace_all(x, "views", "")             # remove words
+  x <- str_replace_all(x, "%", "")                 # remove %
+  x <- str_trim(x)                                 # trim spaces
+  
+  case_when(
+    str_detect(x, "k$") ~ as.numeric(str_remove(x, "k")) * 1e3,
+    str_detect(x, "m$") ~ as.numeric(str_remove(x, "m")) * 1e6,
+    x == "" ~ NA_real_,
+    TRUE ~ suppressWarnings(as.numeric(x))
+  )
+}
+
+tiktoker <- tiktoker |> 
+  mutate(
+    views = convert_number(Views),
+    engagement = convert_number(Engagement),
+    followers = convert_number(Followers),
+    likes = convert_number(Likes)
+  )
+
+famous <- tiktoker |> 
+  mutate(Famous = ifelse(Famous == 1, "Famous", "Not Famous")) |> 
+  group_by(Famous) |> 
+  summarise(avg_engagement = mean(engagement, na.rm = TRUE)) 
+  
+
+  p <- plot_ly(
+  famous,
+  labels = ~Famous,
+  values = ~avg_engagement,
+  type = "pie",
+  hole = 0.5,
+  textinfo = "label+percent",
+  hoverinfo = "text",
+  text = ~paste0(
+    Famous, "<br>",
+    "Average Engagement: ", scales::comma(avg_engagement)
+  )) %>%
+  layout(title = "Interactive Donut — Famous vs Non-Famous Engagement")
+  p
+```
+
+```{r}
+df_bubble <- tiktoker %>%
+  mutate(
+    Famous = ifelse(Famous == 1, "Famous", "Not Famous")
+  )
+
+plot_ly(
+  df_bubble,
+  x = ~Age,
+  size = ~followers,
+  y = ~engagement,
+  color = ~Gender,
+  type = "scatter",
+  mode = "markers",
+  sizes = c(100, 500),
+  text = ~paste0(
+    "User: ", Username,
+    "<br>Age: ", scales::comma(Age),
+    "<br>Followers: ", scales::comma(followers),
+    "<br>Engagement: ", scales::comma(engagement),
+    "<br>Gender: ", Gender
+  ),
+  hoverinfo = "text"
+) %>%
+  layout(
+    title = "Bubble Chart — Gender × Age × Engagement",
+    yaxis = list(title = "Engagement"),
+    xaxis = list(title = "Age")
+  )
+
+```
+
 ```{r}
 topuser <- read_csv("./../data/processed/top_users_vids.csv")
 ```

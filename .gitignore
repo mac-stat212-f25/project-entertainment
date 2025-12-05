@@ -69,3 +69,4 @@ _freeze/
 *.log
 *.aux
 *.toc
+project_network/app.R
