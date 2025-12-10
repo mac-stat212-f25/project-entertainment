@@ -1,0 +1,88 @@
+---
+title: "figure3"
+format: html
+---
+
+```{r}
+library(tidyverse)
+
+tiktok_clean %>%
+  mutate(verification = ifelse(is_verified == TRUE, "Verified", "Not Verified")) %>%
+  ggplot(aes(x = verification, y = awg_engagement_rate)) +
+  geom_boxplot(outlier.alpha = 0.3) +
+  scale_y_log10() +
+  labs(
+    title = "Engagement Rates by Creator Verification Status",
+    subtitle = "Log-scaled for visibility of distribution",
+    x = "Verification Status",
+    y = "Average Engagement Rate (log scale)"
+  ) +
+  theme_minimal()
+
+```
+
+
+> This visualization compares engagement rates between verified and non-verified TikTok creators. While verified creators include some of the highest engagement values, the overall distributions overlap substantially. Many non-verified creators achieve engagement levels comparable to verified accounts. This suggests that verification alone does not drive audience interaction. Instead, engagement appears to depend more on content performance and audience response rather than creator status.
+
+
+```{r}
+tiktok_clean %>%
+  ggplot(aes(x = videos_count, y = likes)) +
+  geom_point(alpha = 0.5) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Posting Frequency and Total Likes",
+    subtitle = "Log–log scale with linear trend",
+    x = "Number of Videos Posted (log scale)",
+    y = "Total Likes (log scale)"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+```{r}
+library(tidyverse)
+library(plotly)
+
+continent_map <- c(
+  "US" = "North America",
+  "BR" = "South America",
+  "BY" = "Europe",
+  "RU" = "Europe",
+  "VN" = "Asia",
+  "BD" = "Asia",
+  "SA" = "Asia"
+)
+
+viz1 <- tiktok_clean %>%
+  mutate(
+    followers = as.numeric(followers),
+    likes = as.numeric(likes),
+    engagement = likes / followers,
+    continent = continent_map[region]
+  ) %>%
+  filter(!is.na(continent), followers > 0)
+
+```
+
+```{r}
+p1 <- plot_ly(
+  data = viz1,
+  x = ~continent,
+  y = ~engagement,
+  color = ~continent,
+  type = "box"
+) %>%
+  layout(
+    title = "Engagement Distribution by Continent",
+    xaxis = list(title = "Continent"),
+    yaxis = list(title = "Engagement (Likes per Follower)"),
+    showlegend = FALSE
+  )
+
+p1
+```
