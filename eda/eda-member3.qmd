@@ -11,6 +11,8 @@ library(stringr)
 df <- read_csv("../data/raw/tiktok.csv") |>
   clean_names()
 
+df2 <- read_csv("../data/raw/tiktok_merged_data_deduplicated.csv")
+
 ```
 
 ```{r}
@@ -94,125 +96,556 @@ ggplot(df, aes(x = bio_length, y = awg_engagement_rate)) +
 ```
 
 ```{r}
+library(tidyverse)
+library(forcats)
+library(scales)
+
+lang_labels <- c(
+  "en" = "English",
+  "es" = "Spanish",
+  "ar" = "Arabic",
+  "ro-RO" = "Romanian",
+  "nl-NL" = "Dutch",
+  "sv-SE" = "Swedish",
+  "ms-MY" = "Malay",
+  "my-MM" = "Burmese",
+  "pt-BR" = "Portuguese (Brazil)",
+  "cs-CZ" = "Czech"
+)
+
+# 1. Top 10 languages by count
 top_langs <- df |>
-  count(language_readable, sort = TRUE) |>
+  filter(!is.na(predicted_lang)) |>
+  count(predicted_lang, sort = TRUE) |>
   slice_head(n = 10)
 
-df_lang <- df |>
-  filter(language_readable %in% top_langs$language_readable)
+# 2. Clean data
+df_lang_clean <- df |>
+  filter(
+    predicted_lang %in% top_langs$predicted_lang,
+    !is.na(awg_engagement_rate),
+    awg_engagement_rate >= 0,
+    awg_engagement_rate <= 5
+  ) |>
+  mutate(
+    language = lang_labels[predicted_lang],   
+    language = fct_reorder(language, awg_engagement_rate, median)
+  )
 
-# -------------------------------
-# Remove extreme outliers (engagement > 5)
-# -------------------------------
-df_lang_clean <- df_lang |>
-  filter(awg_engagement_rate < 5)
-
-# -------------------------------
-# Plot: Engagement by language
-# -------------------------------
-ggplot(df_lang_clean, aes(x = language_readable, y = awg_engagement_rate)) +
-  geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+# 3. Beautiful boxplot
+ggplot(df_lang_clean,
+       aes(x = language, y = awg_engagement_rate)) +
+  geom_boxplot(
+    outlier.alpha = 0.25,
+    fill = "#C6DDF0",
+    color = "#3A4A5A"
+  ) +
+  scale_y_continuous(
+    labels = percent_format(accuracy = 0.1),
+    limits = c(0, 1)
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  ) +
   labs(
     title = "Engagement Rate by Language (Top 10, Cleaned)",
     x = "Language",
     y = "Average Engagement Rate"
   )
+
 ```
 
 ```{r}
-news_keywords <- regex(
-  "news|update|report|reporter|journalist|media|politic|gov|government|election|war|conflict|climate|crisis|ngo|organization|rights|world|country",
-  ignore_case = TRUE
+ggplot(df, aes(x = followers, y = awg_engagement_rate)) +
+  geom_point(alpha = 0.15) +
+  scale_x_log10(labels = scales::comma) +
+  geom_smooth(method = "loess", color = "red") +
+  labs(
+    title = "Relationship Between Followers and Engagement Rate",
+    x = "Followers (log scale)",
+    y = "Engagement Rate"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df, aes(x = is_verified, y = awg_engagement_rate, fill = is_verified)) +
+  geom_boxplot(alpha=0.7) +
+  scale_fill_manual(values=c("#90CAF9", "#42A5F5")) +
+  theme_minimal() +
+  labs(
+    title = "Engagement Rate: Verified vs Non-Verified",
+    x = "Verified?",
+    y = "Engagement Rate"
+  )
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+df2 <- df2 |>
+  mutate(
+    engagement_rate = (likes + comments + shares) / pmax(views, 1), 
+    post_time_raw   = coalesce(posted_time, create_time),
+    post_time       = ymd_hms(post_time_raw, quiet = TRUE)
+  )
+
+library(viridis)
+
+df_time <- df2 |>
+  filter(!is.na(post_time)) |>
+  mutate(
+    hour = hour(post_time),
+    wday = wday(post_time, label = TRUE, abbr = TRUE)
+  ) |>
+  group_by(wday, hour) |>
+  summarise(
+    mean_eng = mean(engagement_rate, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+
+ggplot(df_time, aes(x = hour, y = wday, fill = mean_eng)) +
+  geom_tile(color = "grey20") +
+  scale_fill_viridis(option = "C", direction = 1,
+                     name = "Avg engagement") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Average Engagement Rate by Posting Time",
+    x = "Hour of Day",
+    y = "Day of Week"
+  ) +
+  theme_minimal()
+
+```
+```{r}
+library(tidyverse)
+
+# Ensure hashtags exist and are character
+df_clean <- df2 %>% 
+  filter(!is.na(hashtags) & hashtags != "") %>% 
+  mutate(hashtags = as.character(hashtags))
+
+# Step 1: Split hashtag strings into individual rows
+df_tags <- df_clean %>%
+  separate_rows(hashtags, sep = ",| |;") %>% 
+  mutate(hashtags = str_trim(hashtags)) %>%
+  filter(hashtags != "")
+
+# Step 2: Compute hashtag performance
+hashtag_stats <- df_tags %>%
+  group_by(hashtags) %>%
+  summarize(
+    freq = n(),
+    avg_eng = mean((likes + comments + shares) / views, na.rm = TRUE)
+  ) %>%
+  filter(freq >= 5)   # filter rare hashtags to clean the plot
+
+# Step 3: Plot
+ggplot(hashtag_stats, aes(x = freq, y = avg_eng)) +
+  geom_point(alpha = 0.7, color = "#2C7BB6", size = 3) +
+  scale_x_log10() +
+  labs(
+    title = "Hashtag Performance: Frequency vs Average Engagement",
+    x = "Number of Videos Using Hashtag (log scale)",
+    y = "Average Engagement Rate"
+  ) +
+  theme_minimal(base_size = 14)
+```
+```{r}
+library(tidyverse)
+library(tidytext)
+library(topicmodels)
+
+# -----------------------------
+# 0. Ensure video_id is character
+# -----------------------------
+df2 <- df2 %>% mutate(video_id = as.character(video_id))
+
+# -----------------------------
+# 1. Clean text
+# -----------------------------
+df_desc <- df2 %>%
+  select(video_id, description) %>%
+  mutate(description = tolower(description))
+
+# -----------------------------
+# 2. Tokenize
+# -----------------------------
+tokens <- df_desc %>%
+  unnest_tokens(word, description) %>%
+  anti_join(stop_words)
+
+# -----------------------------
+# 3. Create document-term matrix
+# -----------------------------
+dtm <- tokens %>%
+  count(video_id, word) %>%
+  cast_dtm(video_id, word, n)
+
+# -----------------------------
+# 4. LDA topic model
+# -----------------------------
+lda_model <- LDA(dtm, k = 4, control = list(seed = 123))
+topics <- tidy(lda_model, matrix = "beta")
+
+# -----------------------------
+# 5. Assign topic to each video
+# -----------------------------
+video_topics <- tidy(lda_model, matrix = "gamma") %>%
+  group_by(document) %>%
+  slice_max(gamma, n = 1) %>%
+  rename(video_id = document, topic = topic) %>%
+  mutate(video_id = as.character(video_id))   # ensure it matches df
+
+# -----------------------------
+# 6. Merge engagement data
+# -----------------------------
+df_topic_eng <- video_topics %>%
+  left_join(df2 %>% mutate(video_id = as.character(video_id)),
+            by = "video_id") %>%
+  mutate(engagement = (likes + comments + shares) / plays)
+
+# -----------------------------
+# 7. Plot avg engagement per topic
+# -----------------------------
+df_topic_eng %>%
+  group_by(topic) %>%
+  summarise(avg_engagement = mean(engagement, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(topic), y = avg_engagement, fill = factor(topic))) +
+  geom_col() +
+  labs(
+    title = "Average Engagement Rate by Content Topic",
+    x = "Topic",
+    y = "Avg Engagement Rate"
+  ) +
+  theme_minimal()
+
+topic_labels <- c(
+  "1" = "Lifestyle / Personal",
+  "2" = "Music / Trends",
+  "3" = "Food / Recipes",
+  "4" = "Dance / Challenges"
 )
 
-# ---- Step 2: classify creators ----
-df_rq2 <- df |>
-  mutate(
-    creator_type = if_else(
-      str_detect(biography, news_keywords),
-      "news",
-      "entertainment"
-    )
-  )
-
-table(df_rq2$creator_type)
+df_topic_eng %>%
+  group_by(topic) %>%
+  summarise(avg_engagement = mean(engagement, na.rm = TRUE)) %>%
+  ggplot(aes(x = topic_labels[topic], y = avg_engagement, fill = factor(topic))) +
+  geom_col() +
+  labs(
+    title = "Average Engagement Rate by Content Topic",
+    x = "Topic Category",
+    y = "Avg Engagement Rate"
+  ) +
+  theme_minimal()
 ```
-
 ```{r}
-df_rq2 <- df_rq2 |> 
+library(tidyverse)
+library(tidytext)
+library(topicmodels)
+library(ggrepel)
+
+#------------------------------------------------
+# 0. Prepare data: ensure video_id is character and engagement exists
+#    (Assumes df is already read from your tiktok.csv)
+#------------------------------------------------
+df2 <- df2 %>%
   mutate(
-    creator_type = factor(creator_type, levels = c("news", "entertainment"))
+    video_id   = as.character(video_id),
+    engagement = (likes + comments + shares) / pmax(plays, 1)
   )
 
-# --------- 1. Number of accounts -------------
-df_rq2 |>
-  count(creator_type) |>
-  ggplot(aes(x = creator_type, y = n, fill = creator_type)) +
+#------------------------------------------------
+# 1. Text preprocessing for descriptions
+#------------------------------------------------
+df_desc <- df2 %>%
+  select(video_id, description) %>%
+  mutate(description = tolower(description))
+
+tokens <- df_desc %>%
+  unnest_tokens(word, description) %>%
+  anti_join(stop_words, by = "word")
+
+dtm <- tokens %>%
+  count(video_id, word) %>%
+  cast_dtm(video_id, word, n)
+
+#------------------------------------------------
+# 2. LDA topic model (k = 4 topics)
+#------------------------------------------------
+set.seed(123)
+lda_model <- LDA(dtm, k = 4, control = list(seed = 123))
+
+topics_beta <- tidy(lda_model, matrix = "beta")     # word distributions per topic
+topics_gamma <- tidy(lda_model, matrix = "gamma")   # topic distributions per document
+
+#------------------------------------------------
+# 3. Get top terms per topic (for labeling and keyword plot)
+#------------------------------------------------
+top_terms <- topics_beta %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 8) %>%
+  ungroup()
+
+#------------------------------------------------
+# 4. Assign each video its dominant topic and merge engagement
+#------------------------------------------------
+video_topics <- topics_gamma %>%
+  group_by(document) %>%
+  slice_max(gamma, n = 1) %>%
+  ungroup() %>%
+  rename(video_id = document, topic = topic) %>%
+  mutate(video_id = as.character(video_id))
+
+df_topic_eng <- video_topics %>%
+  left_join(df2, by = "video_id") %>%
+  filter(!is.na(engagement))
+
+#------------------------------------------------
+# 5. Define human-readable labels for topics (EDIT if you want)
+#    You can adjust these based on top_terms output.
+#------------------------------------------------
+topic_labels <- c(
+  "1" = "Dance / Challenges",
+  "2" = "Food / Recipes",
+  "3" = "Lifestyle / Personal",
+  "4" = "Music / Trends"
+)
+
+#------------------------------------------------
+# 6. Plot 1: Average engagement per topic (with SE error bars)
+#------------------------------------------------
+plot_topic_avg <- df_topic_eng %>%
+  group_by(topic) %>%
+  summarise(
+    avg_eng = mean(engagement, na.rm = TRUE),
+    se      = sd(engagement, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(x = topic_labels[as.character(topic)],
+             y = avg_eng,
+             fill = factor(topic))) +
+  geom_col() +
+  geom_errorbar(aes(ymin = avg_eng - se,
+                    ymax = avg_eng + se),
+                width = 0.2) +
+  labs(
+    title = "Average Engagement Rate by Content Topic",
+    x = "Topic Category",
+    y = "Avg Engagement Rate"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+#------------------------------------------------
+# 7. Plot 2: Distribution of engagement per topic (violin + jitter)
+#------------------------------------------------
+plot_topic_violin <- df_topic_eng %>%
+  ggplot(aes(x = topic_labels[as.character(topic)],
+             y = engagement,
+             fill = factor(topic))) +
+  geom_violin(trim = FALSE, alpha = 0.5) +
+  geom_jitter(width = 0.1, alpha = 0.25, size = 1) +
+  labs(
+    title = "Distribution of Engagement Rates by Content Topic",
+    x = "Topic Category",
+    y = "Engagement Rate"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+#------------------------------------------------
+# 8. Plot 3: Number of videos per topic
+#------------------------------------------------
+plot_topic_counts <- df_topic_eng %>%
+  count(topic, name = "n_videos") %>%
+  ggplot(aes(x = topic_labels[as.character(topic)],
+             y = n_videos,
+             fill = factor(topic))) +
+  geom_col() +
+  labs(
+    title = "Number of Videos per Content Topic",
+    x = "Topic Category",
+    y = "Video Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+#------------------------------------------------
+# 9. Plot 4: Top keywords per topic (faceted bar chart)
+#------------------------------------------------
+plot_top_terms <- top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(x = term, y = beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_x_reordered() +
+  facet_wrap(~ topic, scales = "free_y",
+             labeller = labeller(topic = topic_labels)) +
+  coord_flip() +
   labs(
-    title = "Number of Creators: News vs Entertainment",
-    x = "Creator Type",
-    y = "Count"
+    title = "Top Keywords for Each Topic",
+    x = "Term",
+    y = "Importance (beta)"
+  ) +
+  theme_minimal()
+
+#------------------------------------------------
+# 10. Print or arrange plots
+#------------------------------------------------
+plot_topic_avg
+plot_topic_violin
+plot_topic_counts
+plot_top_terms
+```
+```{r}
+
+library(tidyverse)
+library(cld2)
+
+df_clean <- df2 %>%
+  mutate(
+    engagement_rate = (likes + comments + shares) / plays,
+    detected_lang = cld2::detect_language(description, plain_text = TRUE)
+  ) %>%
+  filter(!is.na(detected_lang),
+         !is.na(engagement_rate),
+         engagement_rate < 5)
+
+top_langs <- df_clean %>%
+  count(detected_lang, sort = TRUE) %>%
+  slice_head(n = 10)
+
+df_lang_plot <- df_clean %>%
+  filter(detected_lang %in% top_langs$detected_lang)
+
+# --- Language label mapping ---
+lang_labels <- c(
+  "es" = "Spanish",
+  "fr" = "French",
+  "ru" = "Russian",
+  "pt" = "Portuguese",
+  "it" = "Italian",
+  "en" = "English",
+  "no" = "Norwegian",
+  "sr" = "Serbian",
+  "xx-Qaai" = "Undetermined",
+  "de" = "German"
+)
+
+# --- Plot ---
+ggplot(df_lang_plot,
+       aes(x = reorder(detected_lang, engagement_rate, FUN = median),
+           y = engagement_rate)) +
+  
+  geom_violin(trim = TRUE, alpha = 0.6, fill = "#BDD7EE", color = "gray40") +
+  geom_boxplot(width = 0.15, outlier.shape = NA, fill = "white", color = "black") +
+  stat_summary(fun = median, geom = "point", size = 2.8, color = "black") +
+  
+  scale_x_discrete(labels = lang_labels) +  
+  
+  labs(
+    title = "Engagement Rate by Detected Language (Top 10)",
+    x = "Language",
+    y = "Engagement Rate"
+  ) +
+  
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 35, hjust = 1, size = 13),
+    axis.text.y = element_text(size = 13),
+    panel.grid.minor = element_blank()
   )
 ```
-
 ```{r}
-df_eng_clean <- df_rq2 |>
-  filter(!is.na(awg_engagement_rate),
-         awg_engagement_rate < 5)   # 去掉极端值
+library(tidyverse)
+library(lubridate)
 
-ggplot(df_eng_clean, aes(x = creator_type, y = awg_engagement_rate, fill = creator_type)) +
-  geom_boxplot(show.legend = FALSE) +
-  labs(
-    title = "Engagement Rate: News vs Entertainment Creators",
-    x = "Creator Type",
-    y = "Average Engagement Rate"
-  )
-```
+df_time <- df2 %>%
+  mutate(
+    posted_time = as_datetime(create_time),
 
-```{r}
-df_followers_clean <- df_rq2 |>
-  filter(followers > 0)
+    dow = wday(posted_time, label = TRUE, week_start = 1),
+    hour = hour(posted_time),
 
-ggplot(df_followers_clean, aes(x = creator_type, y = log10(followers), fill = creator_type)) +
-  geom_boxplot(show.legend = FALSE) +
-  labs(
-    title = "Followers (log10): News vs Entertainment Creators",
-    x = "Creator Type",
-    y = "log10(Followers)"
-  )
-```
-
-```{r}
-df_interaction <- df_rq2 |>
+    engagement = (likes + comments + shares) / pmax(plays, 1)
+  ) %>%
   filter(
-    !is.na(like_engagement_rate),
-    like_engagement_rate < 10
+    !is.na(dow),
+    !is.na(hour),
+    engagement >= 0,
+    engagement < 1
   )
 
-ggplot(df_interaction, aes(x = creator_type, y = like_engagement_rate, fill = creator_type)) +
-  geom_boxplot(show.legend = FALSE) +
+df_time_summary <- df_time %>%
+  group_by(dow, hour) %>%
+  summarise(
+    avg_eng = mean(engagement, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(df_time_summary,
+       aes(x = hour, y = dow)) +
+  geom_point(aes(size = avg_eng, color = avg_eng),
+             alpha = 0.85) +
+  scale_color_viridis_c(option = "C") +
+  scale_size(range = c(3, 12)) +
+  scale_x_continuous(breaks = 0:23) +
   labs(
-    title = "Like Engagement Rate: News vs Entertainment",
-    x = "Creator Type",
-    y = "Like Engagement Rate"
+    title = "Engagement by Posting Time",
+    subtitle = "Bubble size & color show average engagement rate",
+    x = "Hour of Day",
+    y = "Day of Week",
+    color = "Avg Engagement",
+    size  = "Avg Engagement"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 13, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
   )
 ```
-
 ```{r}
-df_interaction2 <- df_rq2 |>
-  filter(
-    !is.na(comment_engagement_rate),
-    comment_engagement_rate < 5
+
+thr <- quantile(df_time_summary$avg_eng, 0.8, na.rm = TRUE)
+
+df_time_summary2 <- df_time_summary %>%
+  mutate(
+    is_top = avg_eng >= thr
   )
 
-ggplot(df_interaction2, aes(x = creator_type, y = comment_engagement_rate, fill = creator_type)) +
-  geom_boxplot(show.legend = FALSE) +
+ggplot(df_time_summary2,
+       aes(x = hour, y = dow)) +
+  geom_point(aes(size = avg_eng,
+                 color = avg_eng,
+                 alpha = is_top),
+             show.legend = TRUE) +
+  scale_alpha_manual(values = c(`FALSE` = 0.2, `TRUE` = 1), guide = "none") +
+  scale_color_viridis_c(option = "C") +
+  scale_size(range = c(2, 12)) +
+  scale_x_continuous(breaks = seq(0, 23, by = 2)) +
   labs(
-    title = "Comment Engagement Rate: News vs Entertainment",
-    x = "Creator Type",
-    y = "Comment Engagement Rate"
+    title = "Best Posting Windows on TikTok",
+    subtitle = "Highlighted bubbles show top 20% engagement times",
+    x = "Hour of Day",
+    y = "Day of Week",
+    color = "Avg Engagement",
+    size  = "Avg Engagement"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title    = element_text(size = 20, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 13, hjust = 0.5),
+    axis.text.x   = element_text(angle = 45, hjust = 1)
   )
 ```
+
+
+
 
