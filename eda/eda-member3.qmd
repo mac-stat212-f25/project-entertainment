@@ -11,7 +11,7 @@ library(stringr)
 df <- read_csv("../data/raw/tiktok.csv") |>
   clean_names()
 
-df <- read_csv("../data/raw/tiktok_merged_data_deduplicated.csv")
+df2 <- read_csv("../data/raw/tiktok_merged_data_deduplicated.csv")
 
 ```
 
@@ -24,7 +24,8 @@ num_cols <- c(
   "comment_engagement_rate"
 )
 
-
+df <- df |>
+  mutate(across(all_of(num_cols), ~ suppressWarnings(as.numeric(.))))
 ```
 
 ```{r}
@@ -99,7 +100,6 @@ library(tidyverse)
 library(forcats)
 library(scales)
 
-# 语言代码 → 可读名称 mapping（根据你前10语言自动匹配）
 lang_labels <- c(
   "en" = "English",
   "es" = "Spanish",
@@ -128,7 +128,7 @@ df_lang_clean <- df |>
     awg_engagement_rate <= 5
   ) |>
   mutate(
-    language = lang_labels[predicted_lang],   # 新列：可读语言名
+    language = lang_labels[predicted_lang],   
     language = fct_reorder(language, awg_engagement_rate, median)
   )
 
@@ -154,7 +154,7 @@ ggplot(df_lang_clean,
     title = "Engagement Rate by Language (Top 10, Cleaned)",
     x = "Language",
     y = "Average Engagement Rate"
-  )ha
+  )
 
 ```
 
@@ -187,17 +187,16 @@ ggplot(df, aes(x = is_verified, y = awg_engagement_rate, fill = is_verified)) +
 library(tidyverse)
 library(lubridate)
 
-df <- df |>
+df2 <- df2 |>
   mutate(
-    engagement_rate = (likes + comments + shares) / pmax(views, 1),  # 避免除以0
-    # 用 posted_time 没有就用 create_time
+    engagement_rate = (likes + comments + shares) / pmax(views, 1), 
     post_time_raw   = coalesce(posted_time, create_time),
     post_time       = ymd_hms(post_time_raw, quiet = TRUE)
   )
 
 library(viridis)
 
-df_time <- df |>
+df_time <- df2 |>
   filter(!is.na(post_time)) |>
   mutate(
     hour = hour(post_time),
@@ -227,7 +226,7 @@ ggplot(df_time, aes(x = hour, y = wday, fill = mean_eng)) +
 library(tidyverse)
 
 # Ensure hashtags exist and are character
-df_clean <- df %>% 
+df_clean <- df2 %>% 
   filter(!is.na(hashtags) & hashtags != "") %>% 
   mutate(hashtags = as.character(hashtags))
 
@@ -265,12 +264,12 @@ library(topicmodels)
 # -----------------------------
 # 0. Ensure video_id is character
 # -----------------------------
-df <- df %>% mutate(video_id = as.character(video_id))
+df2 <- df2 %>% mutate(video_id = as.character(video_id))
 
 # -----------------------------
 # 1. Clean text
 # -----------------------------
-df_desc <- df %>%
+df_desc <- df2 %>%
   select(video_id, description) %>%
   mutate(description = tolower(description))
 
@@ -307,7 +306,7 @@ video_topics <- tidy(lda_model, matrix = "gamma") %>%
 # 6. Merge engagement data
 # -----------------------------
 df_topic_eng <- video_topics %>%
-  left_join(df %>% mutate(video_id = as.character(video_id)),
+  left_join(df2 %>% mutate(video_id = as.character(video_id)),
             by = "video_id") %>%
   mutate(engagement = (likes + comments + shares) / plays)
 
@@ -355,7 +354,7 @@ library(ggrepel)
 # 0. Prepare data: ensure video_id is character and engagement exists
 #    (Assumes df is already read from your tiktok.csv)
 #------------------------------------------------
-df <- df %>%
+df2 <- df2 %>%
   mutate(
     video_id   = as.character(video_id),
     engagement = (likes + comments + shares) / pmax(plays, 1)
@@ -364,7 +363,7 @@ df <- df %>%
 #------------------------------------------------
 # 1. Text preprocessing for descriptions
 #------------------------------------------------
-df_desc <- df %>%
+df_desc <- df2 %>%
   select(video_id, description) %>%
   mutate(description = tolower(description))
 
@@ -404,7 +403,7 @@ video_topics <- topics_gamma %>%
   mutate(video_id = as.character(video_id))
 
 df_topic_eng <- video_topics %>%
-  left_join(df, by = "video_id") %>%
+  left_join(df2, by = "video_id") %>%
   filter(!is.na(engagement))
 
 #------------------------------------------------
@@ -508,7 +507,7 @@ plot_top_terms
 library(tidyverse)
 library(cld2)
 
-df_clean <- df %>%
+df_clean <- df2 %>%
   mutate(
     engagement_rate = (likes + comments + shares) / plays,
     detected_lang = cld2::detect_language(description, plain_text = TRUE)
@@ -547,7 +546,7 @@ ggplot(df_lang_plot,
   geom_boxplot(width = 0.15, outlier.shape = NA, fill = "white", color = "black") +
   stat_summary(fun = median, geom = "point", size = 2.8, color = "black") +
   
-  scale_x_discrete(labels = lang_labels) +   # ←★ 这里替换 x 轴 label
+  scale_x_discrete(labels = lang_labels) +  
   
   labs(
     title = "Engagement Rate by Detected Language (Top 10)",
@@ -567,9 +566,8 @@ ggplot(df_lang_plot,
 library(tidyverse)
 library(lubridate)
 
-df_time <- df %>%
+df_time <- df2 %>%
   mutate(
-    # create_time 是 Unix 时间戳，需要转换 ↓↓↓
     posted_time = as_datetime(create_time),
 
     dow = wday(posted_time, label = TRUE, week_start = 1),
@@ -614,9 +612,7 @@ ggplot(df_time_summary,
   )
 ```
 ```{r}
-# 假设 df_time_summary 里有 dow, hour, avg_eng
 
-# 1. 找出 top 20% 的高互动时段
 thr <- quantile(df_time_summary$avg_eng, 0.8, na.rm = TRUE)
 
 df_time_summary2 <- df_time_summary %>%
@@ -624,7 +620,6 @@ df_time_summary2 <- df_time_summary %>%
     is_top = avg_eng >= thr
   )
 
-# 2. 画图：高互动时段颜色/大小更突出，其他变淡
 ggplot(df_time_summary2,
        aes(x = hour, y = dow)) +
   geom_point(aes(size = avg_eng,
@@ -651,8 +646,6 @@ ggplot(df_time_summary2,
   )
 ```
 
-
-```
 
 
 
