@@ -60,11 +60,6 @@ book:
   chapters:
     - index.qmd
 
-    - part: "EDA"
-      chapters:
-        - eda/eda-member1.qmd
-        - eda/eda-member2.qmd
-        - eda/eda-member3.qmd
 
   appendices:
   - appx/project_proposal.qmd

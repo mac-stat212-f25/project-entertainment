@@ -2,9 +2,10 @@
 title: "Report"
 ---
 
-Your report goes here.
+# Introduction
 
-```{r}
-# a test code chunk
-```
+# Data Background
 
+# Data Import and Cleaning
+
+# Data Analysis

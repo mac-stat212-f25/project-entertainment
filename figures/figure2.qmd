@@ -16,6 +16,7 @@ tiktoker <- read_csv("./../data/processed/top-250-tiktokers.csv")
 # What Genres Perform The Best?
 
 ```{r}
+#Flip the axis and sort the genre
 # Separate genres
 genre <- tiktoker |> 
   separate_rows(Genre, sep = ",\\s*") |>
@@ -126,6 +127,7 @@ famous <- tiktoker |>
 ```
 
 ```{r}
+#trend line before the gender gets in
 df_bubble <- tiktoker %>%
   mutate(
     Famous = ifelse(Famous == 1, "Famous", "Not Famous")
