@@ -1,7 +1,6 @@
 ---
 title: "figure2"
 ---
-
 ```{r}
 library(dplyr)
 library(ggplot2)
