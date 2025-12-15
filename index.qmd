@@ -109,7 +109,6 @@ tiktok_clean %>%
 ```
 
 
-
 ## Conclusion/Big Picture
 
 Overall, our findings suggest that TikTok engagement is shaped by a combination of consistency, timing, content type, and audience connection rather than traditional measures of popularity like prior fame or verification status. Smaller creators often outperform larger ones in engagement rate, and lifestyle or personal content tends to resonate most with audiences. TikTok’s algorithm appears to reward regular posting and authentic interaction, allowing a wide range of creators to succeed.
