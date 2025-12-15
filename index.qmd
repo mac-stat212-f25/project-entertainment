@@ -60,7 +60,6 @@ Across our analyses, several clear patterns emerged that directly address our re
 One of the most consistent findings is the importance of timing. Videos posted during the evening, particularly between 5 PM and 10 PM, tend to receive noticeably higher engagement rates. This effect is even stronger on weekends, with Friday and Saturday nights standing out as peak periods for interaction. This suggests that engagement is closely tied to when users are most active on the platform, highlighting timing as a key factor in video performance.
 
 
-
 In addition to timing, language also plays a role in shaping engagement. Videos posted in Spanish, Italian, Russian, and Portuguese often show higher engagement distributions compared to English-language content. This may reflect differences in audience size, competition levels, or community dynamics across linguistic groups, further emphasizing that engagement is influenced by the context in which content is shared.
 
 Creator size is another important factor. Our results show that smaller creators tend to have higher engagement rates than larger, more established accounts. While high-profile creators typically accumulate more total likes due to their large audiences, their engagement is often spread across many followers and therefore less concentrated. 
@@ -121,7 +120,6 @@ For potential content creators, here are the tips that we learned based on the p
 
 
 ## Limitations and Future Work
-
 This project has several limitations. First, our datasets rely on publicly available information and may not capture all factors influencing engagement, such as watch time or algorithmic promotion. Second, the data represent a snapshot in time and may not fully reflect changes in trends or platform policies.
 
 Future work could expand the analysis to include video-level data, sentiment analysis of comments, or longitudinal trends over time. Further research could also focus specifically on informational or news-related content to better understand TikTok’s role in shaping public knowledge and political awareness.
