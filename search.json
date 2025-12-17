@@ -138,7 +138,7 @@
     "href": "appx/project_proposal.html#dataset",
     "title": "Appendix A — Project Proposal",
     "section": "Dataset",
-    "text": "Dataset\nDataset Name : Tiktok Trending Videos (December 2020)\n\n\nSource : Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)\n\nFormat : CSV + JSON\n\nSize : Around 1000 trending videos\nKey variables:\n\n\nauthorMeta.followers : Number of followers of creator\n\nvideoMeta.duration : Length of videos in seconds\n\ntext : video caption\n\nhashtags : list of hashtags\n\nmusicMeta.musicName : Music/sound used in video\n\ndiggCount : Number of likes\n\n\nshareCount : Number of shares\n\nplayCount : Number of views\n\ncommentCount : Number of comments\n\nNotes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)",
+    "text": "Dataset\n\nDataset Name : Tiktok Trending Videos (December 2020)\n\nSource : Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)\nFormat : CSV + JSON\nSize : Around 1000 trending videos\n\n\n\nKey variables:\n\nauthorMeta.followers : Number of followers of creator\nvideoMeta.duration : Length of videos in seconds\ntext : video caption\nhashtags : list of hashtags\nmusicMeta.musicName : Music/sound used in video\ndiggCount : Number of likes\n\nshareCount : Number of shares\nplayCount : Number of views\ncommentCount : Number of comments\n\nNotes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Project Proposal</span>"
@@ -149,7 +149,7 @@
     "href": "appx/project_proposal.html#rough-implementation-responsibility-plan",
     "title": "Appendix A — Project Proposal",
     "section": "Rough Implementation & Responsibility Plan",
-    "text": "Rough Implementation & Responsibility Plan\n\nCode#library(png)\n\n# Read the image\n#img &lt;- readPNG(\"/Users/raouda/Desktop/Implementation.png\")\n\n#plot(1:2, type='n', axes=FALSE, xlab=\"\", ylab=\"\", main=\"\", asp=1)\n#rasterImage(img, 1, 1, 2,2)",
+    "text": "Rough Implementation & Responsibility Plan\n\n\n\nimage1.png",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Project Proposal</span>"
