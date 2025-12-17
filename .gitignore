@@ -70,3 +70,5 @@ _freeze/
 *.aux
 *.toc
 project_network/app.R
+index.qmd
+index.qmd

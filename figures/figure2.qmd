@@ -50,12 +50,12 @@ df_genre <- genre %>%
     avg_engagement = mean(engagement, na.rm = TRUE),
     n = n()
   ) %>%
-  arrange(desc(avg_views))
+  arrange(desc(avg_engagement))
 
 # Plotly interactive bar chart
 p <- plot_ly(df_genre,
-             x = ~Genre,
-             y = ~avg_views,
+             y = ~Genre,
+             x = ~avg_engagement,
              type = "bar",
              hoverinfo = "text",
              text = ~paste(
@@ -66,8 +66,8 @@ p <- plot_ly(df_genre,
              )) %>%
   layout(
     title = "Average TikTok Views by Genre",
-    xaxis = list(title = "Genre"),
-    yaxis = list(title = "Average Views"),
+    yaxis = list(title = "Genre"),
+    xaxis = list(title = "Average Engagement"),
     hoverlabel = list(bgcolor = "white")
   )
 p
@@ -127,6 +127,21 @@ famous <- tiktoker |>
 
 ```{r}
 #trend line before the gender gets in
+library(dplyr)
+library(purrr)
+
+df_smooth <- df_bubble %>%
+  filter(!is.na(Age), !is.na(engagement)) %>%
+  group_by(Gender) %>%
+  group_modify(~ {
+    fit <- loess(engagement ~ Age, data = .x, span = 0.75)
+    tibble(
+      Age = sort(.x$Age),
+      engagement = predict(fit, newdata = data.frame(Age = sort(.x$Age)))
+    )
+  }) %>%
+  ungroup()
+
 df_bubble <- tiktoker %>%
   mutate(
     Famous = ifelse(Famous == 1, "Famous", "Not Famous")
@@ -135,23 +150,32 @@ df_bubble <- tiktoker %>%
 plot_ly(
   df_bubble,
   x = ~Age,
-  size = ~followers,
   y = ~engagement,
   color = ~Gender,
   type = "scatter",
   mode = "markers",
-  sizes = c(100, 500),
+  sizes = 500,
   text = ~paste0(
     "User: ", Username,
     "<br>Age: ", scales::comma(Age),
-    "<br>Followers: ", scales::comma(followers),
     "<br>Engagement: ", scales::comma(engagement),
     "<br>Gender: ", Gender
   ),
   hoverinfo = "text"
 ) %>%
+  add_trace(
+    data = df_smooth,
+    x = ~Age,
+    y = ~engagement,
+    color = ~Gender,
+    type = "scatter",
+    mode = "lines",
+    inherit = FALSE,
+    line = list(width = 3),
+    showlegend = TRUE
+  ) %>%
   layout(
-    title = "Bubble Chart — Gender × Age × Engagement",
+    title = "Age × Engagement with Smoothed Trends by Gender",
     yaxis = list(title = "Engagement"),
     xaxis = list(title = "Age")
   )
