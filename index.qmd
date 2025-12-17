@@ -191,3 +191,17 @@ This project has several limitations. First, our datasets rely on publicly avail
 
 Future work could expand the analysis to include video-level data, sentiment analysis of comments, or longitudinal trends over time. Further research could also focus specifically on informational or news-related content to better understand TikTok’s role in shaping public knowledge and political awareness.
 
+
+## Presentation Slides
+
+You can download the full slide deck here:
+
+[Download Presentation Slides](slides_videos/Stat%20212%20Project%20Prototype.pdf)
+
+
+## Presentation Video
+
+You can download the full presentation video here:
+
+[Download Presentation Video](https://drive.google.com/file/d/1Ij9EWW1ThvbA27t8NdkzPJdWwhzta4NO/view?usp=sharing)
+
