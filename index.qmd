@@ -68,21 +68,105 @@ This pattern appears again when comparing verified and non-verified accounts. No
 
 ```{r}
 library(tidyverse)
+library(janitor)
+library(ggridges)
+library(ggtext)
+library(scales)
+library(fmsb)
+library(tidytext)
 
-tiktok_clean %>%
-  mutate(verification = ifelse(is_verified == TRUE, "Verified", "Not Verified")) %>%
-  ggplot(aes(x = verification, y = awg_engagement_rate)) +
-  geom_boxplot(outlier.alpha = 0.3) +
-  scale_y_log10() +
-  labs(
-    title = "Engagement Rates by Creator Verification Status",
-    subtitle = "Log-scaled for visibility of distribution",
-    x = "Verification Status",
-    y = "Average Engagement Rate (log scale)"
+
+
+tiktok <- read_csv("data/raw/tiktok.csv") %>%
+  clean_names() %>%
+  select(
+    followers, likes, videos_count,
+    awg_engagement_rate, like_engagement_rate, comment_engagement_rate,
+    predicted_lang, region,
+    biography, signature, top_videos
+  ) %>%
+  mutate(across(where(is.character), na_if, "")) %>%
+  drop_na() %>%
+  distinct()
+
+tiktok <- tiktok %>%
+  mutate(is_viral = ifelse(awg_engagement_rate > median(awg_engagement_rate), 
+                           "Viral", "Non-Viral")) %>%
+  mutate(is_viral = factor(is_viral, levels = c("Non-Viral", "Viral")))
+```
+```{r}
+library(ggwordcloud)
+library(highcharter)
+
+custom_stop <- c("tiktok", "video", "follow")
+
+hook_words <- tiktok |>
+  select(is_viral, signature) |>
+  unnest_tokens(word, signature) |>
+  anti_join(stop_words, by="word") |>
+  filter(!word %in% custom_stop) |>
+  group_by(is_viral, word) |>
+  summarise(n = n(), .groups="drop") |>
+  group_by(is_viral) |>
+  slice_max(n, n = 15)
+
+ggplot(hook_words, aes(label = word, size = n)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 20) +
+  theme_minimal() +
+  labs(title = "Word Cloud: Viral Videos (Caption Language)")
+
+ ggplot(hook_words, aes(label = word, size = n, color = n, alpha = n)) +
+  geom_text_wordcloud(
+    rm_outliers = TRUE,
+    eccentricity = 1.5,
+    grid_size = 10,
+    shape = "circle"
   ) +
-  theme_minimal()
+  scale_size_area(max_size = 20, name = "Word Frequency") +
+  scale_alpha(range = c(0.3, 1),name = "Frequency (Transparency)") +         
+  scale_color_viridis_c(option = "C", name = "Frequency (Color)") +
+  guides(
+    size = guide_legend(),
+    color = guide_colorbar(),
+    alpha = guide_legend()
+  ) +
+  labs(
+    title = "Most Common Words in Viral TikTok Captions",
+    subtitle = "Size, color, and transparency all represent word frequency",
+    caption = "Data: TikTok dataset",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    legend.position = "right",
+    panel.grid = element_blank())
+
+ggplot(hook_words, aes(n, fct_reorder(word, n), fill = is_viral)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~is_viral, scales = "free_y") +
+  labs(
+    title = "Top Words in Viral vs Non-Viral TikTok Captions",
+    x = "Frequency",
+    y = ""
+  ) +
+  theme_minimal(base_size = 10)
+
+hcwc <- hook_words %>%
+  hchart(
+    "wordcloud",
+    hcaes(name = word, weight = n),
+    name = "Viral Word Frequency"
+  ) %>%
+  hc_title(text = "Most Common Words in Viral TikTok Captions") %>%
+  hc_tooltip(pointFormat = "{point.name}: {point.weight}") %>%
+  hc_colorAxis(stops = color_stops(10))
 
 ```
+# What Genres Perform The Best?
+
 
 
 Content type also significantly affects engagement, which directly connects to our comparison between entertainment and informational content. Lifestyle and personal videos consistently perform well, indicating that audiences respond strongly to content that feels relatable or authentic. Among top TikTokers, videos related to art, media, and content houses show particularly high engagement, likely due to their visual appeal and collaborative nature. Interestingly, being famous prior to joining TikTok does not appear to provide a clear advantage. Prior fame is not a strong predictor of engagement or virality, reinforcing the idea that TikTok’s algorithm allows creators to succeed based on content performance rather than existing status.
@@ -91,22 +175,6 @@ Demographic factors show more mixed effects. Age appears to be associated with e
 
 Finally, posting frequency plays a crucial role in long-term popularity. Creators who post more consistently tend to accumulate higher total likes over time, even if individual videos do not go viral. While some creators achieve success through a small number of highly viral videos, our findings suggest that sustained posting is a more reliable strategy for building engagement and visibility on the platform. This reinforces the idea that TikTok popularity is often built through consistency rather than one-time success.
 
-```{r}
-tiktok_clean %>%
-  ggplot(aes(x = videos_count, y = likes)) +
-  geom_point(alpha = 0.5) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(
-    title = "Posting Frequency and Total Likes",
-    subtitle = "Log–log scale with linear trend",
-    x = "Number of Videos Posted (log scale)",
-    y = "Total Likes (log scale)"
-  ) +
-  theme_minimal()
-
-```
 
 
 ## Conclusion/Big Picture
