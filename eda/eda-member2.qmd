@@ -1,5 +1,5 @@
 ---
-title: "Raouda Mamane BelLo boubacar"
+title: "EDA-Raouda Mamane BelLo boubacar"
 ---
 
 # **Exploratory Data Analysis (EDA)**  
@@ -20,7 +20,7 @@ library(lubridate)
 For my EDA, I am using the TikTok 2025 Dataset, which is located in our project folder.
 
 ```{r}
-df <- read_csv("/Users/raouda/Documents/GitHub/project-entertainment/data/raw/tiktok_merged_data_deduplicated.csv") %>% 
+df <- read_csv("../data/raw/tiktok_merged_data_deduplicated.csv") %>% 
   clean_names()
 ```
 To get a quick sense of the structure:
