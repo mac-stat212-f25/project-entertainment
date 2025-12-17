@@ -130,6 +130,11 @@ famous <- tiktoker |>
 library(dplyr)
 library(purrr)
 
+df_bubble <- tiktoker %>%
+  mutate(
+    Famous = ifelse(Famous == 1, "Famous", "Not Famous")
+  )
+
 df_smooth <- df_bubble %>%
   filter(!is.na(Age), !is.na(engagement)) %>%
   group_by(Gender) %>%
@@ -142,10 +147,6 @@ df_smooth <- df_bubble %>%
   }) %>%
   ungroup()
 
-df_bubble <- tiktoker %>%
-  mutate(
-    Famous = ifelse(Famous == 1, "Famous", "Not Famous")
-  )
 
 plot_ly(
   df_bubble,
