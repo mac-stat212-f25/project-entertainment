@@ -1,0 +1,52 @@
+---
+title: "Project Proposal"
+---
+
+## Project Title : TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?
+
+**Team Name :** Tiktok Police **Team Members :** Isa Chen, Shurui Zhang, Raouda Mamane Bello Boubacar Kinassa **Category :** Entertainment
+
+## Short Description of the Project
+
+We are studying how people engage with Tiktok videos, focusing on both informational (“news-like”) and entertainment content.
+We will analyze Tiktok video metadata and engagement metrics to determine which factors (hashtags, video length, creator, followers or music) influence video popularity.
+Our project aims to explore how trends differ between news content and entertainment content, helping us understand how social media spreads information.
+
+## Research Questions
+
+Which factors (hashtags, music, video length or followers) most strongly predict the popularity of TikTok videos?
+How does engagement differ between informational/news videos and entertainment videos on TikTok?
+What patterns in TikTok video trends can help explain how people consume news on social media platforms?
+
+## Reasons and Inspiration
+
+TikTok is one of the most influential social media for both entertainment and information sharing.
+While it is known for short viral content, an increasing number of users are also using TikTok for news and current events.
+We are interested in this topic because people of different ages use TikTok in different ways.
+While younger users often watch and share entertainment content, more people are also starting to get news from TikTok.
+By comparing how different age groups engage with news and entertainment videos, we hope to understand how TikTok influences the way people from each generation learn and share information.
+
+## Dataset
+
+### Dataset Name : Tiktok Trending Videos (December 2020)
+
+-   **Source :** Kaggle - Tiktok Trending Videos (https://www.kaggle.com/datasets/erikvdven/tiktok-trending-december-2020)
+-   **Format :** CSV + JSON
+-   **Size :** Around 1000 trending videos
+
+### Key variables:
+
+-   **authorMeta.followers :** Number of followers of creator
+-   **videoMeta.duration :** Length of videos in seconds
+-   **text :** video caption
+-   **hashtags :** list of hashtags
+-   **musicMeta.musicName :** Music/sound used in video
+-   **diggCount :** Number of likes\
+-   **shareCount :** Number of shares
+-   **playCount :** Number of views
+-   **commentCount :** Number of comments
+
+Notes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)
+
+## Rough Implementation & Responsibility Plan
+![image1.png](image1.png)

@@ -6,24 +6,25 @@
 #
 # Options for html
 # https://quarto.org/docs/reference/projects/websites.html#section
+#quarto publish gh-pages --no-browser
 
 project:
   type: book
-  output-dir: docs
   # resources:  # in case something was not included in rendered site automatically
   #   - "data/*"
   #   - "images/*"
 
-
+resources:
+  - slides_videos/*
 
 number-depth: 2
 
 
 
 book:
-  title: "Project Title"
-  author: ["Member 1 first and last name initial", "Member 2 first and last name initial", "Member 3 first and last name initial"]
-  date: today  # use today to update date published based on last time project was edited
+  title: "TikTok Video Popularity Analysis : What Makes Tiktok Videos Go Viral ?"
+  author: ["Isa Chen", "Shurui Zhang", "Raouda Mamane Bello Boubacar"]
+  date: 10/26/2025  # use today to update date published based on last time project was edited
   date-format: full
   # favicon: path/to/favorite-logo.png
   reader-mode: true
@@ -45,7 +46,7 @@ book:
       # footer text
 
   sidebar:
-    title: "Team Name"
+    title: "TikTok Police"
     logo: assets/sidebar-logo.png
     logo-alt: "Random negative space illustration"
     collapse-level: 2
@@ -59,18 +60,13 @@ book:
   chapters:
     - index.qmd
 
-    - part: "EDA"
-      chapters:
-        - eda/eda-member1.qmd
-        - eda/eda-member2.qmd
-        - eda/eda-member3.qmd
 
   appendices:
-  - appx/proposal.qmd
+  - appx/project_proposal.qmd
   - appx/case-study.qmd
-  - wa/wa-member1.qmd
-  - wa/wa-member2.qmd
-  - wa/wa-member3.qmd
+  - eda/eda-member1.qmd
+  - eda/eda-member2.qmd
+  - eda/eda-member3.qmd
 
 
 

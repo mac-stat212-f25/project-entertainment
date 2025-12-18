@@ -1,5 +1,153 @@
 ---
-title: "Member 2 First Name & Last Name Initial"
+title: "EDA-Raouda Mamane BelLo boubacar"
 ---
 
-Your exploratory data analysis of the team datasets go here.
+# **Exploratory Data Analysis (EDA)**  
+This EDA is based on the *TikTok 2025 Dataset* stored in our project directory.  
+Here, I explore the structure of the data, missingness patterns, distributions, and early relationships between engagement metrics like **views, likes, comments, and shares**.
+
+```{r}
+# Load required packages
+library(tidyverse)
+library(DataExplorer)
+library(janitor)
+library(visdat)
+library(lubridate)
+```
+
+## 1. Loading the Dataset
+
+For my EDA, I am using the TikTok 2025 Dataset, which is located in our project folder.
+
+```{r}
+df <- read_csv("../data/raw/tiktok_merged_data_deduplicated.csv") %>% 
+  clean_names()
+```
+To get a quick sense of the structure:
+
+```{r}
+glimpse(df)
+```
+My first impression is that the dataset is fairly large and contains a mix of numeric and character variables. Seeing everything summarized like this helped me understand how the data is organized and what I will need to clean later. The dataset includes numeric engagement metrics (likes, comments, shares, plays, views) and text-based variables (description, hashtags, music, author). It also contains time variables such as create_time and posted_time, which will help explore temporal trends.
+
+
+
+## 2. Missing Data
+I started by checking where the dataset has missing values.
+
+```{r}
+vis_dat(df)
+plot_missing(df)
+```
+
+Reflection:
+The missing data visualization made it clear which variables might cause problems later. Some engagement columns (Some variables like fetch_time, posted_time have missing values) have gaps, which is not surprising since not every video might have all metrics available. Engagement metrics look mostly complete, which is good for modeling. Understanding what is missing early helps avoid problems later in the project.
+
+3. Exploring Numeric Variables
+I wanted to understand how the numeric variables behave, especially engagement metrics.
+
+```{r}
+numeric_df <- df %>% select(where(is.numeric))
+
+plot_histogram(numeric_df)
+plot_density(numeric_df)
+
+summary(numeric_df)
+```
+
+Reflection:
+Almost all engagement metrics (especially views, plays, likes) are extremely right-skewed. This is typical for platforms like TikTok, where only a small number of videos go viral. It means log-transformations might be helpful later.
+
+4. Exploring Categorical Variables
+
+```{r}
+df %>% 
+  select(where(is.character)) %>% 
+  map(~ table(.x) %>% sort(decreasing = TRUE) %>% head(10))
+```
+
+Reflection:
+Looking at the top categories helped me see which creators or hashtags appear the most. A few authors seem very active, which might influence trends in the dataset. This gave me a better idea of how concentrated the dataset is around certain users.
+
+
+5. Correlations Between Variables
+
+```{r}
+plot_correlation(numeric_df)
+```
+
+Reflection:
+Engagement variables (views, likes, shares, comments) seem highly correlated. This makes sense because videos that get a lot of views tend to get attention in other metrics. It also made me think about whether we need all of them later, or if some are redundant.
+
+
+
+
+6. Correlations Between Numeric Variables
+Writing
+
+```{r}
+plot_correlation(numeric_df)
+```
+
+Reflection:
+The strongest correlations appear between views, plays, likes, and shares, which makes sense: videos with high view counts often get high engagement in other categories.
+
+
+6. Relationships Between Key Metrics
+Here I looked at how views relate to likes, since this is usually the clearest pattern in social media engagement.
+(Replace variable names once you confirm the dataset’s actual column names.)
+
+```{r}
+df %>% 
+  ggplot(aes(x = views, y = likes)) +
+  geom_point(alpha = 0.5) +
+  scale_x_continuous(trans = "log10") +
+  scale_y_continuous(trans = "log10") +
+  labs(title = "Relationship Between Views and Likes",
+       x = "Views (log scale)",
+       y = "Likes (log scale)")
+```
+
+Reflection:
+Plotting on a log scale made the pattern much clearer. There is a strong positive relationship, but the spread is pretty wide. This suggests that some videos get a lot of attention but not necessarily a proportionate number of likes. It made me think about the role of content type or timing, which might explain these differences.
+
+7. Time-Based Patterns (If Time Column Exists)
+If the dataset contains a posting timestamp such as create_time or posted_at, this code will work:
+
+```{r}
+if ("create_time" %in% names(df)) {
+  df %>% 
+    mutate(hour_posted = hour(create_time)) %>% 
+    ggplot(aes(hour_posted)) +
+    geom_bar() +
+    labs(title = "Distribution of Posts by Hour of Day",
+         x = "Hour of Day",
+         y = "Number of Posts")
+}
+```
+
+Reflection:
+Time-of-day patterns can be useful because engagement often depends on when the content is posted. Even if the plot is uneven, it’s useful for forming early hypotheses about user behavior.
+
+
+8. Main Takeaways From My EDA
+Here are the key things I learned:
+- Engagement variables (views, plays, likes) are heavily skewed, with many low-engagement videos and a few very viral ones
+- Several creators appear often, meaning activity is not evenly distributed
+- Missingness mainly affects time-related fields like fetch_time and posted_time
+- Engagement metrics are strongly correlated with each other
+- Posting time varies widely, which may influence engagement trends
+
+The relationship between views and likes is strong but not perfect, suggesting other factors matter.
+
+
+
+
+
+
+
+
+
+
+
+

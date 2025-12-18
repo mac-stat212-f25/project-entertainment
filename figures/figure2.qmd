@@ -1,0 +1,188 @@
+---
+title: "figure2"
+---
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+```
+
+```{r}
+tiktoker <- read_csv("./../data/processed/top-250-tiktokers.csv")
+```
+
+# What Genres Perform The Best?
+
+```{r}
+#Flip the axis and sort the genre
+# Separate genres
+genre <- tiktoker |> 
+  separate_rows(Genre, sep = ",\\s*") |>
+  mutate(Genre = str_trim(Genre))
+
+# Function for converting K/M numbers
+convert_number <- function(x) {
+  x <- tolower(x)                                   # normalize lowercase
+  x <- str_replace_all(x, ",", "")                 # remove commas
+  x <- str_replace_all(x, "views", "")             # remove words
+  x <- str_replace_all(x, "%", "")                 # remove %
+  x <- str_trim(x)                                 # trim spaces
+  
+  case_when(
+    str_detect(x, "k$") ~ as.numeric(str_remove(x, "k")) * 1e3,
+    str_detect(x, "m$") ~ as.numeric(str_remove(x, "m")) * 1e6,
+    x == "" ~ NA_real_,
+    TRUE ~ suppressWarnings(as.numeric(x))
+  )
+}
+# Apply to both Views and Engagement
+genre <- genre %>%
+  mutate(
+    views = convert_number(Views),
+    engagement = convert_number(Engagement)
+  )
+
+df_genre <- genre %>%
+  group_by(Genre) %>%
+  summarise(
+    avg_views = mean(views, na.rm = TRUE),
+    avg_engagement = mean(engagement, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(avg_engagement))
+
+# Plotly interactive bar chart
+p <- plot_ly(df_genre,
+             y = ~Genre,
+             x = ~avg_engagement,
+             type = "bar",
+             hoverinfo = "text",
+             text = ~paste(
+               "Genre:", Genre,
+               "<br>Avg Views:", scales::comma(avg_views),
+               "<br>Avg Engagement:", scales::comma(avg_engagement),
+               "<br>Creators:", n
+             )) %>%
+  layout(
+    title = "Average TikTok Views by Genre",
+    yaxis = list(title = "Genre"),
+    xaxis = list(title = "Average Engagement"),
+    hoverlabel = list(bgcolor = "white")
+  )
+p
+```
+
+# Does Famous before TikTok matter for becoming viral on TikTok?
+
+Engagement: Views + Likes + Shares / 15 most recent videos, collected on 10-24-2020
+
+```{r}
+library(tidyverse)
+
+convert_number <- function(x) {
+  x <- tolower(x)                                   # normalize lowercase
+  x <- str_replace_all(x, ",", "")                 # remove commas
+  x <- str_replace_all(x, "views", "")             # remove words
+  x <- str_replace_all(x, "%", "")                 # remove %
+  x <- str_trim(x)                                 # trim spaces
+  
+  case_when(
+    str_detect(x, "k$") ~ as.numeric(str_remove(x, "k")) * 1e3,
+    str_detect(x, "m$") ~ as.numeric(str_remove(x, "m")) * 1e6,
+    x == "" ~ NA_real_,
+    TRUE ~ suppressWarnings(as.numeric(x))
+  )
+}
+
+tiktoker <- tiktoker |> 
+  mutate(
+    views = convert_number(Views),
+    engagement = convert_number(Engagement),
+    followers = convert_number(Followers),
+    likes = convert_number(Likes)
+  )
+
+famous <- tiktoker |> 
+  mutate(Famous = ifelse(Famous == 1, "Famous", "Not Famous")) |> 
+  group_by(Famous) |> 
+  summarise(avg_engagement = mean(engagement, na.rm = TRUE)) 
+  
+
+  p <- plot_ly(
+  famous,
+  labels = ~Famous,
+  values = ~avg_engagement,
+  type = "pie",
+  hole = 0.5,
+  textinfo = "label+percent",
+  hoverinfo = "text",
+  text = ~paste0(
+    Famous, "<br>",
+    "Average Engagement: ", scales::comma(avg_engagement)
+  )) %>%
+  layout(title = "Interactive Donut — Famous vs Non-Famous Engagement")
+  p
+```
+
+```{r}
+#trend line before the gender gets in
+library(dplyr)
+library(purrr)
+
+df_bubble <- tiktoker %>%
+  mutate(
+    Famous = ifelse(Famous == 1, "Famous", "Not Famous")
+  )
+
+df_smooth <- df_bubble %>%
+  filter(!is.na(Age), !is.na(engagement)) %>%
+  group_by(Gender) %>%
+  group_modify(~ {
+    fit <- loess(engagement ~ Age, data = .x, span = 0.75)
+    tibble(
+      Age = sort(.x$Age),
+      engagement = predict(fit, newdata = data.frame(Age = sort(.x$Age)))
+    )
+  }) %>%
+  ungroup()
+
+
+plot_ly(
+  df_bubble,
+  x = ~Age,
+  y = ~engagement,
+  color = ~Gender,
+  type = "scatter",
+  mode = "markers",
+  sizes = 500,
+  text = ~paste0(
+    "User: ", Username,
+    "<br>Age: ", scales::comma(Age),
+    "<br>Engagement: ", scales::comma(engagement),
+    "<br>Gender: ", Gender
+  ),
+  hoverinfo = "text"
+) %>%
+  add_trace(
+    data = df_smooth,
+    x = ~Age,
+    y = ~engagement,
+    color = ~Gender,
+    type = "scatter",
+    mode = "lines",
+    inherit = FALSE,
+    line = list(width = 3),
+    showlegend = TRUE
+  ) %>%
+  layout(
+    title = "Age × Engagement with Smoothed Trends by Gender",
+    yaxis = list(title = "Engagement"),
+    xaxis = list(title = "Age")
+  )
+
+```
+
+```{r}
+topuser <- read_csv("./../data/processed/top_users_vids.csv")
+```
