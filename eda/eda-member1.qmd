@@ -16,7 +16,7 @@ library(scales)
 ```
 
 ```{r}
-raw <- read_csv("./../data/raw/tiktok.csv")
+raw <- read_csv("../data/raw/tiktok.csv") 
 ```
 
 ```{r}

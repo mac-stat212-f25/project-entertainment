@@ -82,6 +82,124 @@ While high-profile creators typically accumulate more total likes due to their l
 This pattern appears again when comparing verified and non-verified accounts.
 Non-verified creators frequently exhibit higher engagement rates, suggesting that smaller or niche creators may foster stronger audience connections.
 These findings challenge the assumption that follower count or verification status alone drives engagement and instead suggest that audience interaction and relatability play a major role.
+```{r}
+
+library(tidyverse)
+library(janitor)
+library(scales)
+library(stringr)
+
+df <- read_csv("data/raw/tiktok.csv") |>
+  clean_names()
+
+df2 <- read_csv("data/raw/tiktok_merged_data_deduplicated.csv")
+library(tidyverse)
+library(cld2)
+
+df_clean <- df2 %>%
+  mutate(
+    engagement_rate = (likes + comments + shares) / plays,
+    detected_lang = cld2::detect_language(description, plain_text = TRUE)
+  ) %>%
+  filter(!is.na(detected_lang),
+         !is.na(engagement_rate),
+         engagement_rate < 5)
+
+top_langs <- df_clean %>%
+  count(detected_lang, sort = TRUE) %>%
+  slice_head(n = 10)
+
+df_lang_plot <- df_clean %>%
+  filter(detected_lang %in% top_langs$detected_lang)
+
+# --- Language label mapping ---
+lang_labels <- c(
+  "es" = "Spanish",
+  "fr" = "French",
+  "ru" = "Russian",
+  "pt" = "Portuguese",
+  "it" = "Italian",
+  "en" = "English",
+  "no" = "Norwegian",
+  "sr" = "Serbian",
+  "xx-Qaai" = "Undetermined",
+  "de" = "German"
+)
+
+# --- Plot ---
+ggplot(df_lang_plot,
+       aes(x = reorder(detected_lang, engagement_rate, FUN = median),
+           y = engagement_rate)) +
+  
+  geom_violin(trim = TRUE, alpha = 0.6, fill = "#BDD7EE", color = "gray40") +
+  geom_boxplot(width = 0.15, outlier.shape = NA, fill = "white", color = "black") +
+  stat_summary(fun = median, geom = "point", size = 2.8, color = "black") +
+  
+  scale_x_discrete(labels = lang_labels) +  
+  
+  labs(
+    title = "Engagement Rate by Detected Language (Top 10)",
+    x = "Language",
+    y = "Engagement Rate"
+  ) +
+  
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 35, hjust = 1, size = 13),
+    axis.text.y = element_text(size = 13),
+    panel.grid.minor = element_blank()
+  )
+```
+```{r}
+library(tidyverse)
+library(lubridate)
+
+df_time <- df2 %>%
+  mutate(
+    posted_time = as_datetime(create_time),
+
+    dow = wday(posted_time, label = TRUE, week_start = 1),
+    hour = hour(posted_time),
+
+    engagement = (likes + comments + shares) / pmax(plays, 1)
+  ) %>%
+  filter(
+    !is.na(dow),
+    !is.na(hour),
+    engagement >= 0,
+    engagement < 1
+  )
+
+df_time_summary <- df_time %>%
+  group_by(dow, hour) %>%
+  summarise(
+    avg_eng = mean(engagement, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(df_time_summary,
+       aes(x = hour, y = dow)) +
+  geom_point(aes(size = avg_eng, color = avg_eng),
+             alpha = 0.85) +
+  scale_color_viridis_c(option = "C") +
+  scale_size(range = c(3, 12)) +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Engagement by Posting Time",
+    subtitle = "Bubble size & color show average engagement rate",
+    x = "Hour of Day",
+    y = "Day of Week",
+    color = "Avg Engagement",
+    size  = "Avg Engagement"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 13, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
 
 ```{r}
 library(tidyverse)

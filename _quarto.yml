@@ -10,12 +10,12 @@
 
 project:
   type: book
-  output-dir: docs
   # resources:  # in case something was not included in rendered site automatically
   #   - "data/*"
   #   - "images/*"
 
-
+resources:
+  - slides_videos/*
 
 number-depth: 2
 

@@ -49,14 +49,4 @@ By comparing how different age groups engage with news and entertainment videos,
 Notes: We will categorize videos into news (hashtags like #news, #currentevents, etc….) and entertainment (all other content)
 
 ## Rough Implementation & Responsibility Plan
-
-```{r}
-#library(png)
-
-# Read the image
-#img <- readPNG("/Users/raouda/Desktop/Implementation.png")
-
-#plot(1:2, type='n', axes=FALSE, xlab="", ylab="", main="", asp=1)
-#rasterImage(img, 1, 1, 2,2)
-
-```
+![image1.png](image1.png)
